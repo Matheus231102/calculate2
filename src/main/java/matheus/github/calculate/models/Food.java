@@ -1,24 +1,24 @@
 package matheus.github.calculate.models;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 
 @Getter
 @Setter
+@Entity
+@Table(name = "tb_foods")
 public class Food {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public Long id;
+	private Long id;
 
-	public String name;
-	public Float calories;
-	public Float proteins;
-	public Float carbohydrates;
-	public Float fats;
+	private String name;
+	private Float calories;
+	private Float proteins;
+	private Float carbohydrates;
+	private Float fats;
 
 }
