@@ -17,6 +17,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -30,18 +31,17 @@ public class JwtService {
 
     public static final String JWT_USERNAME_CLAIM = "username";
     public static final String JWT_AUTHORITIES_CLAIM = "authorities";
-    private final int HOURS_TO_INCREASE = 8;
-
-
-    @Autowired
-    private UserRepository userRepository;
+    private final int HOURS_TO_INCREASE_THE_EXPIRATION_TIME = 8;
 
 	@Autowired
-	private UserService userService;
+	private UserRepository userRepository;
 
-    public String getToken(String username) throws UserNotFoundException {
-		User user = userService.findByUsername(username);
-		return generateToken(user);
+	public String getToken(String username) throws UserNotFoundException {
+		Optional<User> optionalUser = userRepository.findByUsername(username);
+		if (optionalUser.isPresent()) {
+			return generateToken(optionalUser.get());
+		}
+		throw new UserNotFoundException("User not found by provided username: " + username);
     }
 
     public String generateToken(User user) {
@@ -50,7 +50,7 @@ public class JwtService {
 				.withIssuer(JWT_ISSUER)
 				.withClaim(JWT_USERNAME_CLAIM, user.getUsername())
 				.withClaim(JWT_AUTHORITIES_CLAIM, authoritiesToStringSeparetedComma(user.getAuthorities()) )
-				.withExpiresAt(generateExpirationDate(HOURS_TO_INCREASE))
+				.withExpiresAt(generateExpirationDate(HOURS_TO_INCREASE_THE_EXPIRATION_TIME))
 				.sign(algorithmProvider.getAlgorithm());
 
 	   } catch (IllegalArgumentException e) {
