@@ -1,5 +1,6 @@
-package matheus.github.calculate.exception;
+package matheus.github.calculate.exception.controlleradvice;
 
+import matheus.github.calculate.exception.ExceptionResponse;
 import matheus.github.calculate.exception.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +13,9 @@ import java.time.LocalDateTime;
 public class GlobalControllerAdvice {
 
 	@ExceptionHandler(UserNotFoundException.class)
-	public ResponseEntity<ExceptionResponseEntity> userNotFoundException(UserNotFoundException exception) {
+	public ResponseEntity<ExceptionResponse> userNotFoundException(UserNotFoundException exception) {
 		String errorMessage = "User Not Found";
-		ExceptionResponseEntity exceptionResponseEntity = ExceptionResponseEntity.builder()
+		ExceptionResponse exceptionResponseEntity = ExceptionResponse.builder()
 				.timestamp(LocalDateTime.now())
 				.status(HttpStatus.NOT_FOUND.value())
 				.error(errorMessage)
@@ -25,5 +26,4 @@ public class GlobalControllerAdvice {
 				.status(HttpStatus.NOT_FOUND)
 				.body(exceptionResponseEntity);
 	}
-	//todo criar modified response exception entity
 }

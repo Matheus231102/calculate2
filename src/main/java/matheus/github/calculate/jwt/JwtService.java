@@ -1,13 +1,12 @@
 package matheus.github.calculate.jwt;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.exceptions.*;
+import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import matheus.github.calculate.exception.exceptions.UserNotFoundException;
 import matheus.github.calculate.jwt.algorithm.AlgorithmProvider;
 import matheus.github.calculate.models.User;
 import matheus.github.calculate.repositories.UserRepository;
-import matheus.github.calculate.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
@@ -56,6 +55,7 @@ public class JwtService {
 	   } catch (IllegalArgumentException e) {
 		  throw new RuntimeException(e);
 	   } catch (JWTCreationException e) {
+		   //todo threat this exception in filter
 		  throw new RuntimeException("Error generating token: " + e.getMessage());
 	   }
     }
@@ -75,20 +75,10 @@ public class JwtService {
     }
 
     public DecodedJWT getDecodedToken(String token) {
-		try {
-            return JWT.require(algorithmProvider.getAlgorithm())
-                    .withIssuer(JWT_ISSUER)
-                    .build()
-                    .verify(token);
-        } catch (AlgorithmMismatchException e) {
-		  throw new AlgorithmMismatchException("An error occurred while getting the algorithm: " + e.getMessage());
-		} catch (TokenExpiredException e) {
-            throw new TokenExpiredException("The token was expired at: ", e.getExpiredOn());
-        } catch (MissingClaimException e) {
-		  throw new RuntimeException("The claim has been forgotten: " + e.getMessage());
-		} catch (JWTVerificationException e) {
-            throw new RuntimeException("An error occurred while decoding token: " + e.getMessage());
-        }
+		return JWT.require(algorithmProvider.getAlgorithm())
+				.withIssuer(JWT_ISSUER)
+				.build()
+				.verify(token);
     }
 
 }
