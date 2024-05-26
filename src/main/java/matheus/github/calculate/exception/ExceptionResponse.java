@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-public class ExceptionResponseEntity {
+public class ExceptionResponse {
 	private LocalDateTime timestamp;
 	private Integer status;
 	private String error;
