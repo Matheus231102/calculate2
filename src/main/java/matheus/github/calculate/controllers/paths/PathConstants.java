@@ -1,4 +1,4 @@
-package matheus.github.calculate.controller.paths;
+package matheus.github.calculate.controllers.paths;
 
 public class PathConstants {
 	public final static String DEFAULT_USER_PATH = "/users";

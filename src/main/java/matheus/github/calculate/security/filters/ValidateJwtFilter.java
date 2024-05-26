@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import static matheus.github.calculate.controller.paths.PathConstants.*;
+import static matheus.github.calculate.controllers.paths.PathConstants.*;
 
 @Component
 public class ValidateJwtFilter extends OncePerRequestFilter {
