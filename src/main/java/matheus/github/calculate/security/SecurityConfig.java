@@ -1,5 +1,6 @@
 package matheus.github.calculate.security;
 
+import matheus.github.calculate.controllers.paths.PathConstants;
 import matheus.github.calculate.security.filters.ValidateJwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +13,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import static matheus.github.calculate.controllers.paths.PathConstants.*;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @EnableMethodSecurity
@@ -31,9 +34,11 @@ public class SecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(
 						requests -> requests
-								.anyRequest().permitAll()
+								.requestMatchers(DEFAULT_USER_PATH + LOGIN_PATH).permitAll()
+								.requestMatchers(DEFAULT_USER_PATH + REGISTER_PATH).permitAll()
+								.anyRequest().authenticated()
 				)
-				.addFilterBefore(validateJwtFilter, BasicAuthenticationFilter.class)
+				.addFilterBefore(validateJwtFilter, UsernamePasswordAuthenticationFilter.class)
 				.httpBasic(withDefaults())
 				.build();
 	}
