@@ -44,7 +44,7 @@ public class UserController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping("/all")
 	public ResponseEntity<String> deleteAllUsers() {
-		userService.deleteAllUsers();
+		userService.deleteAll();
 		return ResponseEntity
 				.status(HttpStatus.NO_CONTENT)
 				.body("all users deleted successfully");

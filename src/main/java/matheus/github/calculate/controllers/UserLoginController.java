@@ -26,12 +26,10 @@ public class UserLoginController {
 	public ResponseEntity<String> loginUser(@RequestBody @Valid AuthDTO authDTO) throws UserNotFoundException {
 		String token = userService.loginUser(authDTO);
 
-		//todo verificar se é pelo email ou username
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.header("Authorization", token)
 				.body("User: " + authDTO.getLogin() + " successfully logged in");
 	}
-
 
 }

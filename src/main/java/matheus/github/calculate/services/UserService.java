@@ -2,13 +2,14 @@ package matheus.github.calculate.services;
 
 import matheus.github.calculate.dto.AuthDTO;
 import matheus.github.calculate.dto.UserDTO;
+import matheus.github.calculate.exception.exceptions.EmailAlreadyExistsException;
 import matheus.github.calculate.exception.exceptions.UserNotFoundException;
+import matheus.github.calculate.exception.exceptions.UsernameAlreadyExistsException;
 import matheus.github.calculate.jwt.JwtService;
 import matheus.github.calculate.mapper.user.UserMapper;
 import matheus.github.calculate.models.User;
 import matheus.github.calculate.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,7 +36,6 @@ public class UserService {
 	private AuthenticationManager authenticationManager;
 
 	public User findById(Long id) throws UserNotFoundException {
-		//todo verificar validações necessárias para o método
 		Optional<User> user = userRepository.findById(id);
 		if (user.isPresent()) {
 			return user.get();
@@ -52,6 +52,14 @@ public class UserService {
 	}
 
 	public User registerUser(UserDTO userDTO) {
+		if (userRepository.existsByUsername(userDTO.getUsername())) {
+			throw new UsernameAlreadyExistsException("An user with username " + userDTO.getUsername() + " already exists");
+		}
+
+		if (userRepository.existsByEmail(userDTO.getEmail())) {
+			throw new EmailAlreadyExistsException("An user with e-mail " + userDTO.getEmail() + " already exists");
+		}
+
 		User user = userMapper.toEntity(userDTO);
 		encodeUserPassword(user);
 		return userRepository.save(user);
@@ -69,7 +77,7 @@ public class UserService {
 		return jwtService.getToken(authDTO.getLogin());
 	}
 
-	public void deleteAllUsers() {
+	public void deleteAll() {
 		userRepository.deleteAll();
 	}
 

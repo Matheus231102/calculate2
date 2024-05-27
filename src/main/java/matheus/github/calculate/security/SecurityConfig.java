@@ -1,6 +1,5 @@
 package matheus.github.calculate.security;
 
-import matheus.github.calculate.controllers.paths.PathConstants;
 import matheus.github.calculate.security.filters.ValidateJwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static matheus.github.calculate.controllers.paths.PathConstants.*;
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -42,6 +42,16 @@ public class SecurityConfig {
 				.httpBasic(withDefaults())
 				.build();
 	}
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**").allowedOrigins("http://localhost:4200");
+			}
+		};
+	}
+
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
 		return authenticationConfiguration.getAuthenticationManager();

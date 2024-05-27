@@ -15,6 +15,7 @@ import java.util.List;
 @Table(name = "tb_users")
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
