@@ -23,4 +23,6 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
 	@Modifying
 	@Query("DELETE FROM Food f WHERE f.id = :id and f.user = :user")
 	void deleteByUserAndId(User user, Long id);
+
+	boolean existsByUserAndId(User user, Long id);
 }

@@ -18,7 +18,7 @@ public class JwtControllerAdvice {
 	@ExceptionHandler(AlgorithmMismatchException.class)
 	public ResponseEntity<ExceptionResponse> handleAlgorithmMismatchException(AlgorithmMismatchException exception) {
 		String errorMessage = "Error to get the algorithm";
-		ExceptionResponse exceptionResponseEntity = ExceptionResponse.builder()
+		ExceptionResponse exceptionResponse = ExceptionResponse.builder()
 				.timestamp(LocalDateTime.now())
 				.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
 				.error(errorMessage)
@@ -27,13 +27,13 @@ public class JwtControllerAdvice {
 
 		return ResponseEntity
 				.status(HttpStatus.INTERNAL_SERVER_ERROR)
-				.body(exceptionResponseEntity);
+				.body(exceptionResponse);
 	}
 
 	@ExceptionHandler(TokenExpiredException.class)
 	public ResponseEntity<ExceptionResponse> handleTokenExpiredException(TokenExpiredException exception) {
 		String errorMessage = "Invalid JWT token";
-		ExceptionResponse exceptionResponseEntity = ExceptionResponse.builder()
+		ExceptionResponse exceptionResponse = ExceptionResponse.builder()
 				.timestamp(LocalDateTime.now())
 				.status(HttpStatus.BAD_REQUEST.value())
 				.error(errorMessage)
@@ -42,13 +42,13 @@ public class JwtControllerAdvice {
 
 		return ResponseEntity
 				.status(HttpStatus.BAD_REQUEST)
-				.body(exceptionResponseEntity);
+				.body(exceptionResponse);
 	}
 
 	@ExceptionHandler(MissingClaimException.class)
 	public ResponseEntity<ExceptionResponse> handleMissingClaimException(MissingClaimException exception) {
 		String errorMessage = "Missing jwt claim";
-		ExceptionResponse exceptionResponseEntity = ExceptionResponse.builder()
+		ExceptionResponse exceptionResponse = ExceptionResponse.builder()
 				.timestamp(LocalDateTime.now())
 				.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
 				.error(errorMessage)
@@ -57,14 +57,14 @@ public class JwtControllerAdvice {
 
 		return ResponseEntity
 				.status(HttpStatus.INTERNAL_SERVER_ERROR)
-				.body(exceptionResponseEntity);
+				.body(exceptionResponse);
 	}
 
 
 	@ExceptionHandler(JWTVerificationException.class)
 	public ResponseEntity<ExceptionResponse> handleJWTVerificationException(JWTVerificationException exception) {
 		String errorMessage = "Invalid JWT token";
-		ExceptionResponse exceptionResponseEntity = ExceptionResponse.builder()
+		ExceptionResponse exceptionResponse = ExceptionResponse.builder()
 				.timestamp(LocalDateTime.now())
 				.status(HttpStatus.BAD_REQUEST.value())
 				.error(errorMessage)
@@ -73,7 +73,7 @@ public class JwtControllerAdvice {
 
 		return ResponseEntity
 				.status(HttpStatus.BAD_REQUEST)
-				.body(exceptionResponseEntity);
+				.body(exceptionResponse);
 	}
 
 }

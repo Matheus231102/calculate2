@@ -8,6 +8,8 @@ import matheus.github.calculate.models.Food;
 import matheus.github.calculate.security.AuthenticationContext;
 import matheus.github.calculate.services.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,27 +26,31 @@ public class FoodController {
 	private FoodService foodService;
 
 	@PostMapping
-	public Food registerFood(@RequestBody @Valid FoodDTO foodDTO) throws UserNotFoundException {
+	public ResponseEntity<Food> registerFood(@RequestBody @Valid FoodDTO foodDTO) throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		return foodService.registerByAuthenticatedName(authenticatedUsername, foodDTO);
+		Food food = foodService.registerByAuthenticatedName(authenticatedUsername, foodDTO);
+		return ResponseEntity.status(HttpStatus.CREATED).body(food);
 	}
 
 	@GetMapping
-	public List<Food> getAllFoods() throws UserNotFoundException {
+	public ResponseEntity<List<Food>> getAllFoods() throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		return foodService.getAllFoodsByAuthenticatedName(authenticatedUsername);
+		List<Food> foodList = foodService.getAllFoodsByAuthenticatedName(authenticatedUsername);
+		return ResponseEntity.status(HttpStatus.OK).body(foodList);
 	}
 
 	@DeleteMapping
-	public void deleteAllFoods() throws UserNotFoundException {
+	public ResponseEntity deleteAllFoods() throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
 		foodService.deleteAllFoodsByAuthenticatedName(authenticatedUsername);
+		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("/{id}")
-	public void deleteFood(@PathVariable long id) throws UserNotFoundException {
+	public ResponseEntity deleteFood(@PathVariable long id) throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
 		foodService.deleteFoodByAuthenticatedNameAndFoodId(authenticatedUsername, id);
+		return ResponseEntity.noContent().build();
 	}
 
 }

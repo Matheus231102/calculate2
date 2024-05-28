@@ -2,6 +2,7 @@ package matheus.github.calculate.services;
 
 import matheus.github.calculate.dto.FoodDTO;
 import matheus.github.calculate.dto.UserDTO;
+import matheus.github.calculate.exception.exceptions.FoodNotFoundException;
 import matheus.github.calculate.exception.exceptions.UserNotFoundException;
 import matheus.github.calculate.mapper.FoodMapper;
 import matheus.github.calculate.models.Food;
@@ -48,6 +49,10 @@ public class FoodService {
 
 	public void deleteFoodByAuthenticatedNameAndFoodId(String authenticatedUsername, Long id) throws UserNotFoundException {
 		User user = findUserByAuthenticatedName(authenticatedUsername);
+		boolean foodExists = foodRepository.existsByUserAndId(user, id);
+		if (!foodExists) {
+			throw new FoodNotFoundException(String.format("Food not found by provided id: %s", id));
+		}
 		foodRepository.deleteByUserAndId(user, id);
 	}
 

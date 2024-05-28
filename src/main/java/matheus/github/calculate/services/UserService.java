@@ -49,7 +49,7 @@ public class UserService {
 		if (optionalUser.isPresent()) {
 			return optionalUser.get();
 		}
-		throw new UserNotFoundException("User not found by provided username: " + username);
+		throw new UserNotFoundException(String.format("User not found by provided username: %s", username));
 	}
 
 	public List<User> findAll() {
@@ -58,11 +58,11 @@ public class UserService {
 
 	public User register(UserDTO userDTO) {
 		if (userRepository.existsByUsername(userDTO.getUsername())) {
-			throw new UsernameAlreadyExistsException("An user with username " + userDTO.getUsername() + " already exists");
+			throw new UsernameAlreadyExistsException(String.format("An user with username %s already exists", userDTO.getUsername()));
 		}
 
 		if (userRepository.existsByEmail(userDTO.getEmail())) {
-			throw new EmailAlreadyExistsException("An user with e-mail " + userDTO.getEmail() + " already exists");
+			throw new EmailAlreadyExistsException(String.format("An user with e-mail %s already exists", userDTO.getEmail()));
 		}
 
 		User user = userMapper.toEntity(userDTO);
