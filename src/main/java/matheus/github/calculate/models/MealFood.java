@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 
 @Getter
 @Setter
@@ -18,12 +19,18 @@ public class MealFood {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(nullable = false, unique = true)
+	private String name;
+
 	@ManyToOne
+	@JoinColumn(name = "meal_id", nullable = false)
 	private Meal meal;
 
 	@ManyToOne
+	@JoinColumn(name = "food_id", nullable = false)
 	private Food food;
 
+	@Column(nullable = false)
 	private Integer foodAmount;
 
 }

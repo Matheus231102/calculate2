@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -20,14 +22,26 @@ public class Food {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(nullable = false, unique = true)
 	private String name;
+
+	@Column(nullable = false)
 	private double calories;
+
+	@Column(nullable = false)
 	private double proteins;
+
+	@Column(nullable = false)
 	private double carbohydrates;
+
+	@Column(nullable = false)
 	private double fats;
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
+
+	@OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
+	private List<MealFood> mealFoods;
 
 }

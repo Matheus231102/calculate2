@@ -20,7 +20,11 @@ public class Meal {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(nullable = false, unique = false)
 	private String name;
+
+	@OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
+	private List<MealFood> mealFoods;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
