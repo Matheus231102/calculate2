@@ -1,4 +1,4 @@
-package matheus.github.calculate.controllers;
+package matheus.github.calculate.controllers.user;
 
 import matheus.github.calculate.exception.exceptions.UserNotFoundException;
 import matheus.github.calculate.models.User;
@@ -24,7 +24,6 @@ public class UserController {
 	@Autowired
 	private AuthenticationContext authenticationContext;
 
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping
 	public ResponseEntity<User> getUserByToken() throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
@@ -34,7 +33,6 @@ public class UserController {
 				.body(user);
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("/all")
 	public ResponseEntity<List<User>> getAllUsers() {
 		List<User> userList = userService.findAll();
@@ -43,7 +41,6 @@ public class UserController {
 				.body(userList);
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/{id}")
 	public ResponseEntity<User> getUserById(@PathVariable Long id) throws UserNotFoundException {
 		User user = userService.findById(id);
@@ -52,7 +49,6 @@ public class UserController {
 				.body(user);
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping("/all")
 	public ResponseEntity<String> deleteAllUsers() {
 		userService.deleteAll();

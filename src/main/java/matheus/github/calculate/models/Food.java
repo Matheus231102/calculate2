@@ -1,12 +1,17 @@
 package matheus.github.calculate.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "tb_foods")
 public class Food {
@@ -16,12 +21,13 @@ public class Food {
 	private Long id;
 
 	private String name;
-	private Float calories;
-	private Float proteins;
-	private Float carbohydrates;
-	private Float fats;
+	private double calories;
+	private double proteins;
+	private double carbohydrates;
+	private double fats;
 
-	@ManyToOne
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private User user;
 
 }

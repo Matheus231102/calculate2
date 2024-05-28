@@ -45,15 +45,17 @@ public class User implements UserDetails {
 	@Enumerated(EnumType.STRING)
 	private EnumRole role;
 
-	@OneToMany
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Food> foods;
 
-	@OneToMany
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Meal> meals;
 
 	@PrePersist
 	private void onCreate() {
 		setRole(EnumRole.USER);
+		setFoods(List.of());
+		setMeals(List.of());
 	}
 
 	@JsonIgnore

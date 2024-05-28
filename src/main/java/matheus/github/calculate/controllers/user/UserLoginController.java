@@ -1,4 +1,4 @@
-package matheus.github.calculate.controllers;
+package matheus.github.calculate.controllers.user;
 
 import jakarta.validation.Valid;
 import matheus.github.calculate.dto.AuthDTO;
@@ -24,7 +24,7 @@ public class UserLoginController {
 
 	@PostMapping(LOGIN_PATH)
 	public ResponseEntity<String> loginUser(@RequestBody @Valid AuthDTO authDTO) throws UserNotFoundException {
-		String token = userService.loginUser(authDTO);
+		String token = userService.login(authDTO);
 
 		return ResponseEntity
 				.status(HttpStatus.OK)

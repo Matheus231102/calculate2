@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
+public class UsernamePasswordAuthenticationProvider implements AuthenticationManager {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
@@ -34,9 +34,9 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
 	   throw new InvalidPasswordException("you must enter valid password");
     }
 
-	@Override
-	public boolean supports(Class<?> authentication) {
-		return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
-	}
+//	@Override
+//	public boolean supports(Class<?> authentication) {
+//		return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
+//	}
 
 }

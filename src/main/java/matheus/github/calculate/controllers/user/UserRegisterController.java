@@ -1,7 +1,6 @@
-package matheus.github.calculate.controllers;
+package matheus.github.calculate.controllers.user;
 
 import jakarta.validation.Valid;
-import matheus.github.calculate.controllers.paths.PathConstants;
 import matheus.github.calculate.dto.UserDTO;
 import matheus.github.calculate.jwt.JwtService;
 import matheus.github.calculate.models.User;
@@ -28,7 +27,7 @@ public class UserRegisterController {
 
 	@PostMapping(REGISTER_PATH)
 	public ResponseEntity<User> registerUser(@RequestBody @Valid UserDTO userDTO) {
-		User user = userService.registerUser(userDTO);
+		User user = userService.register(userDTO);
 		String token = jwtService.generateToken(user);
 		return ResponseEntity
 				.status(HttpStatus.CREATED)

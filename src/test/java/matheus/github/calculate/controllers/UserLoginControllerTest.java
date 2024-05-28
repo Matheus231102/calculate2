@@ -2,23 +2,14 @@ package matheus.github.calculate.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import matheus.github.calculate.controllers.paths.PathConstants;
 import matheus.github.calculate.dto.UserDTO;
-import matheus.github.calculate.enums.EnumRole;
-import matheus.github.calculate.models.User;
 import matheus.github.calculate.services.UserService;
-import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -28,10 +19,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static io.restassured.RestAssured.*;
-import static io.restassured.matcher.RestAssuredMatchers.*;
 import static matheus.github.calculate.controllers.paths.PathConstants.*;
 
-import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -71,7 +60,7 @@ class UserLoginControllerTest {
 				.email("teste@cena")
 				.build();
 
-		userService.registerUser(userDTO);
+		userService.register(userDTO);
 
 		String userDtoJson = objectMapper.writeValueAsString(userDTO);
 
