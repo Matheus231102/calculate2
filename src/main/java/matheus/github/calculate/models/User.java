@@ -45,6 +45,12 @@ public class User implements UserDetails {
 	@Enumerated(EnumType.STRING)
 	private EnumRole role;
 
+	@OneToMany
+	private List<Food> foods;
+
+	@OneToMany
+	private List<Meal> meals;
+
 	@PrePersist
 	private void onCreate() {
 		setRole(EnumRole.USER);

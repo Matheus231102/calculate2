@@ -13,13 +13,18 @@ import matheus.github.calculate.services.UserService;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static io.restassured.RestAssured.*;
@@ -29,9 +34,11 @@ import static matheus.github.calculate.controllers.paths.PathConstants.*;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestPropertySource(locations = "classpath:application-test.properties")
 class UserLoginControllerTest {
 
 	@LocalServerPort
@@ -46,38 +53,40 @@ class UserLoginControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		userService.deleteAll();
-		RestAssured.port = port;
 	}
 
 	@Test
+	void testingDatabaseConnection() {
+
+
+	}
+
+	@Test
+//	@Disabled
 	void givenCorrectUsernameAndPassword_whenLoginUser_thenReturnToken() throws JsonProcessingException {
 		UserDTO userDTO = UserDTO.builder()
-				.username("john")
-				.name("john cena")
-				.password("john123")
-				.email("john@cena")
-				.build();
-
-		User user = User.builder()
-				.id(1L)
-				.username("john")
-				.name("john cena")
-				.email("john@cena")
+				.username("teste")
+				.name("teste cena")
+				.password("teste")
+				.email("teste@cena")
 				.build();
 
 		userService.registerUser(userDTO);
 
 		String userDtoJson = objectMapper.writeValueAsString(userDTO);
-		String userJson = objectMapper.writeValueAsString(user);
 
 		given()
 			.contentType(ContentType.JSON)
 			.body(userDtoJson)
-			.port(port)
 		.when()
-			.post(DEFAULT_USER_PATH + REGISTER_PATH)
+			.post(DEFAULT_USER_PATH + REGISTER_PATH);
+
+		given()
+			.contentType(ContentType.JSON)
+		.when()
+			.post(DEFAULT_USER_PATH + "/all")
 		.then()
-			.statusCode(HttpStatus.CREATED.value());
+			.statusCode(HttpStatus.OK.value());
+
 	}
 }

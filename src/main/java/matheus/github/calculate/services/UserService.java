@@ -10,11 +10,13 @@ import matheus.github.calculate.mapper.user.UserMapper;
 import matheus.github.calculate.models.User;
 import matheus.github.calculate.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -51,6 +53,10 @@ public class UserService {
 		throw new UserNotFoundException("User not found by provided username: " + username);
 	}
 
+	public List<User> findAll() {
+		return userRepository.findAll();
+	}
+
 	public User registerUser(UserDTO userDTO) {
 		if (userRepository.existsByUsername(userDTO.getUsername())) {
 			throw new UsernameAlreadyExistsException("An user with username " + userDTO.getUsername() + " already exists");
@@ -80,6 +86,7 @@ public class UserService {
 	public void deleteAll() {
 		userRepository.deleteAll();
 	}
+
 
 	private void encodeUserPassword(User user) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));

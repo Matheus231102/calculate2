@@ -4,18 +4,22 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @Entity
-@Table(name = "tb_meals")
-public class Meal {
+@Table(name = "tb_meals_foods")
+public class MealFood {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String name;
+	@ManyToOne
+	private Meal meal;
+
+	@ManyToOne
+	private Food food;
+
+	private Integer foodAmount;
 
 }

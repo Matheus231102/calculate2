@@ -21,4 +21,7 @@ public class Food {
 	private Float carbohydrates;
 	private Float fats;
 
+	@ManyToOne
+	private User user;
+
 }

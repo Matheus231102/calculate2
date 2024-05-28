@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static matheus.github.calculate.controllers.paths.PathConstants.DEFAULT_USER_PATH;
 
 @RestController
@@ -30,6 +32,15 @@ public class UserController {
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(user);
+	}
+
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@GetMapping("/all")
+	public ResponseEntity<List<User>> getAllUsers() {
+		List<User> userList = userService.findAll();
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(userList);
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
