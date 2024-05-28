@@ -55,7 +55,6 @@ public class JwtService {
 	   } catch (IllegalArgumentException e) {
 		  throw new RuntimeException(e);
 	   } catch (JWTCreationException e) {
-		   //todo threat this exception in filter
 		  throw new RuntimeException("Error generating token: " + e.getMessage());
 	   }
     }

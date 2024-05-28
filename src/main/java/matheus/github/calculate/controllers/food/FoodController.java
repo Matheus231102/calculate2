@@ -35,4 +35,16 @@ public class FoodController {
 		return foodService.getAllFoodsByAuthenticatedName(authenticatedUsername);
 	}
 
+	@DeleteMapping
+	public void deleteAllFoods() throws UserNotFoundException {
+		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
+		foodService.deleteAllFoodsByAuthenticatedName(authenticatedUsername);
+	}
+
+	@DeleteMapping("/{id}")
+	public void deleteFood(@PathVariable long id) throws UserNotFoundException {
+		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
+		foodService.deleteFoodByAuthenticatedNameAndFoodId(authenticatedUsername, id);
+	}
+
 }

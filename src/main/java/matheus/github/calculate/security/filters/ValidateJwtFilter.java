@@ -56,7 +56,7 @@ public class ValidateJwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 		String token = null;
 		try {
-			token = extractTokenFromRequest(request, response);
+			token = extractTokenFromRequest(request);
 		} catch (InvalidAuthenticationHeaderException exception) {
 			var responseEntity = headerControllerAdvice.handleInvalidAuthenticationHeaderException(exception);
 			customizedExceptionResponse.modifyResponse(response, responseEntity);
@@ -113,7 +113,7 @@ public class ValidateJwtFilter extends OncePerRequestFilter {
 	   return paths.contains(request.getRequestURI());
     }
 
-    private String extractTokenFromRequest(HttpServletRequest request, HttpServletResponse response) throws InvalidAuthenticationHeaderException, IOException {
+    private String extractTokenFromRequest(HttpServletRequest request) throws InvalidAuthenticationHeaderException, IOException {
 		String authorization = request.getHeader(AUTHORIZATION_HEADER);
 
 		if (authorization == null || !authorization.startsWith(BEARER_PREFIX)) {

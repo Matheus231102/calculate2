@@ -22,7 +22,7 @@ public class Meal {
 
 	private String name;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
 
 }

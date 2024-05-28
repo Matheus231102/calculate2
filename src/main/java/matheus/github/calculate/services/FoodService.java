@@ -41,6 +41,16 @@ public class FoodService {
 		return foodRepository.findAllByUser(user);
 	}
 
+	public void deleteAllFoodsByAuthenticatedName(String authenticatedUsername) throws UserNotFoundException {
+		User user = findUserByAuthenticatedName(authenticatedUsername);
+		foodRepository.deleteAllByUser(user);
+	}
+
+	public void deleteFoodByAuthenticatedNameAndFoodId(String authenticatedUsername, Long id) throws UserNotFoundException {
+		User user = findUserByAuthenticatedName(authenticatedUsername);
+		foodRepository.deleteByUserAndId(user, id);
+	}
+
 	private User findUserByAuthenticatedName(String authenticatedName) throws UserNotFoundException {
 		return userService.findByUsername(authenticatedName);
 	}
