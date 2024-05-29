@@ -44,4 +44,9 @@ public class Food {
 	@OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
 	private List<MealFood> mealFoods;
 
+	public void addMealFood(MealFood mealFood) {
+		mealFoods.add(mealFood);
+		mealFood.setFood(this);
+	}
+
 }

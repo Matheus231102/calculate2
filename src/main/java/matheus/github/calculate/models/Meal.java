@@ -1,11 +1,14 @@
 package matheus.github.calculate.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import matheus.github.calculate.enums.EnumRole;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,10 +26,21 @@ public class Meal {
 	@Column(nullable = false, unique = false)
 	private String name;
 
-	@OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
+	@JsonIgnore
+	@OneToMany(mappedBy = "meal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<MealFood> mealFoods;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
+
+	@PrePersist
+	private void onCreate() {
+		setMealFoods(List.of());
+	}
+
+	public void addMealFood(MealFood mealFood) {
+		mealFoods.add(mealFood);
+		mealFood.setMeal(this);
+	}
 
 }

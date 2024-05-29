@@ -45,9 +45,11 @@ public class User implements UserDetails {
 	@Enumerated(EnumType.STRING)
 	private EnumRole role;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Food> foods;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Meal> meals;
 
@@ -58,6 +60,7 @@ public class User implements UserDetails {
 		setMeals(List.of());
 	}
 
+	//todo verificar como se implementa sistema de hierarquias de roles no spring security
 	@JsonIgnore
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

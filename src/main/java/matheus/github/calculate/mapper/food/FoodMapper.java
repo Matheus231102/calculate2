@@ -1,4 +1,4 @@
-package matheus.github.calculate.mapper;
+package matheus.github.calculate.mapper.food;
 
 import matheus.github.calculate.dto.FoodDTO;
 import matheus.github.calculate.models.Food;
