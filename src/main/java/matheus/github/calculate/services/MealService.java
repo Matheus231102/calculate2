@@ -37,12 +37,16 @@ public class MealService {
 		return mealRepository.save(meal);
 	}
 
+	public Meal register(Meal meal) {
+		return mealRepository.save(meal);
+	}
+
 	public List<Meal> getAllMealsByAuthenticatedName(String authenticatedName) throws UserNotFoundException {
 		User user = userService.findByUsername(authenticatedName);
 		return mealRepository.findAllByUser(user);
 	}
 
-	public Meal getMealByAuthUsernameAndId(String authenticatedName, long id) throws UserNotFoundException {
+	public Meal getMealByAuthUsernameAndMealId(String authenticatedName, long id) throws UserNotFoundException {
 		User user = userService.findByUsername(authenticatedName);
 		Optional<Meal> optionalMeal = mealRepository.findByUserAndId(user, id);
 		if (optionalMeal.isEmpty()) {

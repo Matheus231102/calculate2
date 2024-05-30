@@ -13,7 +13,10 @@ import java.util.Optional;
 
 @Repository
 public interface FoodRepository extends JpaRepository<Food, Long> {
+
 	List<Food> findAllByUser(User user);
+	Optional<Food> findByUserAndId(User user, Long id);
+
 	@Transactional
 	@Modifying
 	@Query("DELETE FROM Food f WHERE f.user = :user")
@@ -24,7 +27,6 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
 	@Query("DELETE FROM Food f WHERE f.id = :id and f.user = :user")
 	void deleteByUserAndId(User user, Long id);
 
-	Optional<Food> findByUserAndId(User user, Long id);
 	boolean existsByUserAndId(User user, Long id);
 
 }

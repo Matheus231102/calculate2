@@ -2,7 +2,6 @@ package matheus.github.calculate.services;
 
 import matheus.github.calculate.dto.FoodDTO;
 import matheus.github.calculate.exception.exceptions.FoodNotFoundException;
-import matheus.github.calculate.exception.exceptions.MealNotFoundException;
 import matheus.github.calculate.exception.exceptions.UserNotFoundException;
 import matheus.github.calculate.mapper.food.FoodMapper;
 import matheus.github.calculate.mapper.meal.MealMapper;
@@ -35,13 +34,8 @@ public class FoodService {
 	private MealFoodService mealFoodService;
 
 	@Autowired
-	private MealMapper mealMapper;
-
-	@Autowired
 	private MealService mealService;
 
-	@Autowired
-	private MealRepository mealRepository;
 	@Autowired
 	private MealFoodRepository mealFoodRepository;
 
@@ -57,9 +51,22 @@ public class FoodService {
 		return foodRepository.save(food);
 	}
 
+	public Food register(Food food) {
+		return foodRepository.save(food);
+	}
+
 	public List<Food> getAllFoodsByAuthUsername(String authenticatedUsername) throws UserNotFoundException {
 		User user = userService.findByUsername(authenticatedUsername);
 		return foodRepository.findAllByUser(user);
+	}
+
+	public Food getFoodByAuthUsernameAndFoodId(String authenticatedUsername, long id) throws UserNotFoundException {
+		User user = userService.findByUsername(authenticatedUsername);
+		Optional<Food> foodOptional = foodRepository.findByUserAndId(user, id);
+		if (foodOptional.isEmpty()) {
+			throw new FoodNotFoundException(String.format("Food not found by provided id: %s", id));
+		}
+		return foodOptional.get();
 	}
 
 	public void deleteAllFoodsByAuthUsername(String authenticatedUsername) throws UserNotFoundException {
@@ -74,26 +81,6 @@ public class FoodService {
 			throw new FoodNotFoundException(String.format("Food not found by provided id: %s", id));
 		}
 		foodRepository.deleteByUserAndId(user, id);
-	}
-
-	public MealFood insertFoodIntoMeal(String authenticatedUsername , long foodId, long mealId, int foodAmount) throws UserNotFoundException {
-		User user = userService.findByUsername(authenticatedUsername);
-
-		//todo método de pegar food pelo id no serviço
-		Optional<Food> foodOptional = foodRepository.findByUserAndId(user, foodId);
-		if (foodOptional.isEmpty()) {
-			throw new FoodNotFoundException(String.format("Food not found by provided id: %s", foodId));
-		}
-
-		Meal meal = mealService.getMealByAuthUsernameAndId(authenticatedUsername, mealId);
-		Food food = foodOptional.get();
-
-		MealFood mealFood = new MealFood();
-
-		food.addMealFood(mealFood);
-		meal.addMealFood(mealFood);
-		mealFood.setFoodAmount(foodAmount);
-		return mealFoodRepository.save(mealFood);
 	}
 
 

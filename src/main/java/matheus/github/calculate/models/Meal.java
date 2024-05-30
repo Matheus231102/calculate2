@@ -23,13 +23,14 @@ public class Meal {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false, unique = false)
+	@Column(nullable = false)
 	private String name;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "meal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<MealFood> mealFoods;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
 

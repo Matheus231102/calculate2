@@ -41,6 +41,7 @@ public class Food {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
 	private List<MealFood> mealFoods;
 

@@ -5,6 +5,7 @@ import matheus.github.calculate.controllers.paths.PathConstants;
 import matheus.github.calculate.dto.FoodDTO;
 import matheus.github.calculate.exception.exceptions.UserNotFoundException;
 import matheus.github.calculate.models.Food;
+import matheus.github.calculate.models.MealFood;
 import matheus.github.calculate.security.AuthenticationContext;
 import matheus.github.calculate.services.FoodService;
 import matheus.github.calculate.services.MealService;
@@ -25,9 +26,6 @@ public class FoodController {
 
 	@Autowired
 	private FoodService foodService;
-
-	@Autowired
-	private MealService mealService;
 
 	@PostMapping
 	public ResponseEntity<Food> registerFood(@RequestBody @Valid FoodDTO foodDTO) throws UserNotFoundException {
@@ -57,6 +55,4 @@ public class FoodController {
 		return ResponseEntity.noContent().build();
 	}
 
-	// Recebe foodId do usuario, Recebe mealId do usuario e acrecenta o relacionamento entre food e meal
-	//todo insertFoodInMeal
 }
