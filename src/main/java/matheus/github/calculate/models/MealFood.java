@@ -15,16 +15,15 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 @Table(name = "tb_meals_foods")
 public class MealFood {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@EmbeddedId
+	private MealFoodId id;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "meal_id", nullable = false)
+	@JoinColumn(nullable = false, insertable = false, updatable = false)
 	private Meal meal;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "food_id", nullable = false)
+	@JoinColumn(nullable = false, insertable = false, updatable = false)
 	private Food food;
 
 	@Column(nullable = false)

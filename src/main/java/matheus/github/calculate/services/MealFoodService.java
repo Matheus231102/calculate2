@@ -1,5 +1,6 @@
 package matheus.github.calculate.services;
 
+import matheus.github.calculate.dto.MealFoodRequest;
 import matheus.github.calculate.exception.exceptions.UserNotFoundException;
 import matheus.github.calculate.models.Food;
 import matheus.github.calculate.models.Meal;
@@ -31,18 +32,22 @@ public class MealFoodService {
 	private UserService userService;
 
 
-	public MealFood registerMealFoodByAuthUsername(String authenticatedUsername, long foodId, long mealId, int foodAmount) throws UserNotFoundException {
+	public MealFood registerMealFoodByAuthUsername(String authenticatedUsername, MealFoodRequest mealFoodRequest) throws UserNotFoundException {
+		long foodId = mealFoodRequest.getFoodId();
+		long mealId = mealFoodRequest.getMealId();
+		int foodAmount = mealFoodRequest.getFoodAmount();
+
 		Food food = foodService.getFoodByAuthUsernameAndFoodId(authenticatedUsername, foodId);
 		Meal meal = mealService.getMealByAuthUsernameAndMealId(authenticatedUsername, mealId);
 
 		MealFood mealFood = new MealFood();
-		mealFood.setFoodAmount(foodAmount);
 
 		meal.getMealFoods().add(mealFood);
 		food.getMealFoods().add(mealFood);
 
 		mealFood.setFood(food);
 		mealFood.setMeal(meal);
+		mealFood.setFoodAmount(foodAmount);
 
 		foodService.register(food);
 		mealService.register(meal);

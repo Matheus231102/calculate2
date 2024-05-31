@@ -2,7 +2,9 @@ package matheus.github.calculate.controllers.mealfood;
 
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.validation.Valid;
 import matheus.github.calculate.controllers.paths.PathConstants;
+import matheus.github.calculate.dto.MealFoodRequest;
 import matheus.github.calculate.exception.exceptions.UserNotFoundException;
 import matheus.github.calculate.models.MealFood;
 import matheus.github.calculate.repositories.MealFoodRepository;
@@ -25,16 +27,7 @@ public class MealFoodController {
 	private AuthenticationContext authenticationContext;
 
 	@Autowired
-	private FoodService foodService;
-
-	@Autowired
 	private MealFoodService mealFoodService;
-
-	@Autowired
-	private MealService mealService;
-
-	@Autowired
-	private MealFoodRepository mealFoodRepository;
 
 	@GetMapping
 	public ResponseEntity<List<MealFood>> getAllMealFoodsByAuthUsername() throws UserNotFoundException {
@@ -43,10 +36,10 @@ public class MealFoodController {
 		return ResponseEntity.ok(mealFoodList);
 	}
 
-	@PostMapping("/food/{foodid}/meal/{mealid}")
-	public ResponseEntity<MealFood> insertFoodIntoMealByAuthUsername(@PathVariable long foodid, @PathVariable long mealid, @RequestParam int amount) throws UserNotFoundException {
+	@PostMapping
+	public ResponseEntity<MealFood> insertFoodIntoMealByAuthUsername(@RequestBody @Valid MealFoodRequest mealFoodRequest) throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		MealFood mealFood = mealFoodService.registerMealFoodByAuthUsername(authenticatedUsername, foodid, mealid, amount);
+		MealFood mealFood = mealFoodService.registerMealFoodByAuthUsername(authenticatedUsername, mealFoodRequest);
 		return ResponseEntity.status(HttpStatus.CREATED).body(mealFood);
 	}
 

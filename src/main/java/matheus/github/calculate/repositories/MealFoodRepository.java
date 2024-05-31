@@ -13,8 +13,9 @@ import java.util.List;
 public interface MealFoodRepository extends JpaRepository<MealFood, Long> {
 
 	@Query("""
-			SELECT mf FROM Food f INNER JOIN MealFood mf INNER JOIN Meal r
-				WHERE mf.food = f AND mf.meal = r AND f.user = :user
+			SELECT mf FROM MealFood mf 
+			INNER JOIN mf.food f 
+			INNER JOIN mf.meal.user 
 			""")
 	List<MealFood> findAllByUser(@Param("user") User user);
 }
