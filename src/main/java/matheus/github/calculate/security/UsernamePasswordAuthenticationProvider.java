@@ -28,15 +28,11 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationMan
 
 	   UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-	   if (passwordEncoder.matches(password, userDetails.getPassword())) {
-		  return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+	   if (!passwordEncoder.matches(password, userDetails.getPassword())) {
+		   throw new InvalidPasswordException("you must enter valid password");
 	   }
-	   throw new InvalidPasswordException("you must enter valid password");
-    }
 
-//	@Override
-//	public boolean supports(Class<?> authentication) {
-//		return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
-//	}
+	   return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+	}
 
 }

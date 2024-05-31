@@ -2,12 +2,11 @@ package matheus.github.calculate.services;
 
 import matheus.github.calculate.dto.AuthDTO;
 import matheus.github.calculate.dto.UserDTO;
-import matheus.github.calculate.exception.exceptions.EmailAlreadyExistsException;
-import matheus.github.calculate.exception.exceptions.UserNotFoundException;
-import matheus.github.calculate.exception.exceptions.UsernameAlreadyExistsException;
+import matheus.github.calculate.exception.exceptions.user.UserNotFoundException;
 import matheus.github.calculate.jwt.JwtService;
 import matheus.github.calculate.mapper.user.UserMapper;
 import matheus.github.calculate.models.User;
+import matheus.github.calculate.models.uservalidationstrategy.UserValidationStrategy;
 import matheus.github.calculate.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,6 +35,9 @@ public class UserService {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
+	@Autowired
+	private List<UserValidationStrategy> userValidationStrategies;
+
 	public User findById(Long id) throws UserNotFoundException {
 		Optional<User> user = userRepository.findById(id);
 		if (user.isPresent()) {
@@ -57,14 +59,8 @@ public class UserService {
 	}
 
 	public User register(UserDTO userDTO) {
-		if (userRepository.existsByUsername(userDTO.getUsername())) {
-			throw new UsernameAlreadyExistsException(String.format("An user with username %s already exists", userDTO.getUsername()));
-		}
-
-		if (userRepository.existsByEmail(userDTO.getEmail())) {
-			throw new EmailAlreadyExistsException(String.format("An user with e-mail %s already exists", userDTO.getEmail()));
-		}
-
+		userValidationStrategies.forEach(userValidationStrategy -> userValidationStrategy.execute(userDTO));
+		//todo create a password validation strategy
 		User user = userMapper.toEntity(userDTO);
 		encodeUserPassword(user);
 		return userRepository.save(user);

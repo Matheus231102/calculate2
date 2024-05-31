@@ -1,4 +1,4 @@
-package matheus.github.calculate.exception.exceptions;
+package matheus.github.calculate.exception.exceptions.user;
 
 public class UserNotFoundException extends Exception {
 	public UserNotFoundException(String message) {

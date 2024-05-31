@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MealFoodRequest {
+public class MealFoodDTO {
 
 	@NotNull
 	@Size(min = 0)

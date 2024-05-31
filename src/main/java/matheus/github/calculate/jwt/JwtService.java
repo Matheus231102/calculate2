@@ -3,7 +3,7 @@ package matheus.github.calculate.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import matheus.github.calculate.exception.exceptions.UserNotFoundException;
+import matheus.github.calculate.exception.exceptions.user.UserNotFoundException;
 import matheus.github.calculate.jwt.algorithm.AlgorithmProvider;
 import matheus.github.calculate.models.User;
 import matheus.github.calculate.repositories.UserRepository;
@@ -37,11 +37,11 @@ public class JwtService {
 
 	public String getToken(String username) throws UserNotFoundException {
 		Optional<User> optionalUser = userRepository.findByUsername(username);
-		if (optionalUser.isPresent()) {
-			return generateToken(optionalUser.get());
+		if (optionalUser.isEmpty()) {
+			throw new UserNotFoundException("Userr not found by provided usename: " + username);
 		}
-		throw new UserNotFoundException("User not found by provided username: " + username);
-    }
+		return generateToken(optionalUser.get());
+	}
 
     public String generateToken(User user) {
 	   try {

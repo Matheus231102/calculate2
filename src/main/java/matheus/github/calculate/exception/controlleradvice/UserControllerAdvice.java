@@ -1,10 +1,11 @@
 package matheus.github.calculate.exception.controlleradvice;
 
 import matheus.github.calculate.exception.ExceptionResponse;
-import matheus.github.calculate.exception.exceptions.EmailAlreadyExistsException;
+import matheus.github.calculate.exception.exceptions.user.EmailAlreadyExistsException;
 import matheus.github.calculate.exception.exceptions.InvalidPasswordException;
-import matheus.github.calculate.exception.exceptions.UserNotFoundException;
-import matheus.github.calculate.exception.exceptions.UsernameAlreadyExistsException;
+import matheus.github.calculate.exception.exceptions.user.InvalidUserException;
+import matheus.github.calculate.exception.exceptions.user.UserNotFoundException;
+import matheus.github.calculate.exception.exceptions.user.UsernameAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,6 +15,21 @@ import java.time.LocalDateTime;
 
 @ControllerAdvice
 public class UserControllerAdvice {
+
+	@ExceptionHandler(InvalidUserException.class)
+	public ResponseEntity<ExceptionResponse> handleInvalidUserException(InvalidUserException exception) {
+		String errorMessage = "Invalid user";
+		ExceptionResponse exceptionResponseEntity = ExceptionResponse.builder()
+				.timestamp(LocalDateTime.now())
+				.status(HttpStatus.BAD_REQUEST.value())
+				.error(errorMessage)
+				.message(exception.getMessage())
+				.build();
+
+		return ResponseEntity
+				.status(HttpStatus.BAD_REQUEST)
+				.body(exceptionResponseEntity);
+	}
 
 	@ExceptionHandler(UserNotFoundException.class)
 	public ResponseEntity<ExceptionResponse> handleUserNotFoundException(UserNotFoundException exception) {
@@ -45,7 +61,6 @@ public class UserControllerAdvice {
 				.body(exceptionResponseEntity);
 	}
 
-
 	@ExceptionHandler(UsernameAlreadyExistsException.class)
 	public ResponseEntity<ExceptionResponse> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException exception) {
 		String errorMessage = "User already exists";
@@ -61,7 +76,6 @@ public class UserControllerAdvice {
 				.body(exceptionResponseEntity);
 	}
 
-
 	@ExceptionHandler(EmailAlreadyExistsException.class)
 	public ResponseEntity<ExceptionResponse> handleEmailAlreadyExistsException(EmailAlreadyExistsException exception) {
 		String errorMessage = "User already exists";
@@ -76,10 +90,5 @@ public class UserControllerAdvice {
 				.status(HttpStatus.CONFLICT)
 				.body(exceptionResponseEntity);
 	}
-
-
-
-
-
 
 }

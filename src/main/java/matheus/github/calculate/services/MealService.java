@@ -2,7 +2,7 @@ package matheus.github.calculate.services;
 
 import matheus.github.calculate.dto.MealDTO;
 import matheus.github.calculate.exception.exceptions.MealNotFoundException;
-import matheus.github.calculate.exception.exceptions.UserNotFoundException;
+import matheus.github.calculate.exception.exceptions.user.UserNotFoundException;
 import matheus.github.calculate.mapper.meal.MealMapper;
 import matheus.github.calculate.models.Meal;
 import matheus.github.calculate.models.User;

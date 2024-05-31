@@ -1,13 +1,12 @@
 package matheus.github.calculate.controllers.user;
 
-import matheus.github.calculate.exception.exceptions.UserNotFoundException;
+import matheus.github.calculate.exception.exceptions.user.UserNotFoundException;
 import matheus.github.calculate.models.User;
 import matheus.github.calculate.security.AuthenticationContext;
 import matheus.github.calculate.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -2,7 +2,7 @@ package matheus.github.calculate.controllers.user;
 
 import jakarta.validation.Valid;
 import matheus.github.calculate.dto.AuthDTO;
-import matheus.github.calculate.exception.exceptions.UserNotFoundException;
+import matheus.github.calculate.exception.exceptions.user.UserNotFoundException;
 import matheus.github.calculate.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

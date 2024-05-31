@@ -1,11 +1,9 @@
 package matheus.github.calculate.controllers.meal;
 
 import jakarta.validation.Valid;
-import matheus.github.calculate.controllers.paths.PathConstants;
 import matheus.github.calculate.dto.MealDTO;
-import matheus.github.calculate.exception.exceptions.UserNotFoundException;
+import matheus.github.calculate.exception.exceptions.user.UserNotFoundException;
 import matheus.github.calculate.models.Meal;
-import matheus.github.calculate.models.User;
 import matheus.github.calculate.security.AuthenticationContext;
 import matheus.github.calculate.services.MealService;
 import matheus.github.calculate.services.UserService;
