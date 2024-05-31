@@ -1,10 +1,8 @@
 package matheus.github.calculate.security;
 
-import matheus.github.calculate.exception.exceptions.InvalidPasswordException;
+import matheus.github.calculate.exception.exceptions.user.InvalidPasswordException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

@@ -2,7 +2,7 @@ package matheus.github.calculate.exception.controlleradvice;
 
 import matheus.github.calculate.exception.ExceptionResponse;
 import matheus.github.calculate.exception.exceptions.user.EmailAlreadyExistsException;
-import matheus.github.calculate.exception.exceptions.InvalidPasswordException;
+import matheus.github.calculate.exception.exceptions.user.InvalidPasswordException;
 import matheus.github.calculate.exception.exceptions.user.InvalidUserException;
 import matheus.github.calculate.exception.exceptions.user.UserNotFoundException;
 import matheus.github.calculate.exception.exceptions.user.UsernameAlreadyExistsException;

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static matheus.github.calculate.controllers.paths.PathConstants.DEFAULT_MEAL_PATH;
+import static matheus.github.calculate.paths.PathConstants.DEFAULT_MEAL_PATH;
 
 @RestController
 @RequestMapping(DEFAULT_MEAL_PATH)

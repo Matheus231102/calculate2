@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static matheus.github.calculate.controllers.paths.PathConstants.DEFAULT_USER_PATH;
+import static matheus.github.calculate.paths.PathConstants.DEFAULT_USER_PATH;
 
 @RestController
 @RequestMapping(DEFAULT_USER_PATH)

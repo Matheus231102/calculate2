@@ -39,19 +39,19 @@ public class UserService {
 	private List<UserValidationStrategy> userValidationStrategies;
 
 	public User findById(Long id) throws UserNotFoundException {
-		Optional<User> user = userRepository.findById(id);
-		if (user.isPresent()) {
-			return user.get();
+		Optional<User> optionalUser = userRepository.findById(id);
+		if (optionalUser.isEmpty()) {
+			throw new UserNotFoundException("User not found by provided id: " + id);
 		}
-		throw new UserNotFoundException("User not found by provided id: " + id);
+		return optionalUser.get();
 	}
 
 	public User findByUsername(String username) throws UserNotFoundException {
 		Optional<User> optionalUser = userRepository.findByUsername(username);
-		if (optionalUser.isPresent()) {
-			return optionalUser.get();
+		if (optionalUser.isEmpty()) {
+			throw new UserNotFoundException(String.format("User not found by provided username: %s", username));
 		}
-		throw new UserNotFoundException(String.format("User not found by provided username: %s", username));
+		return optionalUser.get();
 	}
 
 	public List<User> findAll() {
@@ -60,13 +60,16 @@ public class UserService {
 
 	public User register(UserDTO userDTO) {
 		userValidationStrategies.forEach(userValidationStrategy -> userValidationStrategy.execute(userDTO));
-		//todo create a password validation strategy
 		User user = userMapper.toEntity(userDTO);
-		encodeUserPassword(user);
+
+		String encodedPassword = passwordEncoder.encode(user.getPassword());
+		user.setPassword(encodedPassword);
+
 		return userRepository.save(user);
 	}
 
 	public String login(AuthDTO authDTO) throws UserNotFoundException {
+		//todo verificar se consigo utilizar algum padrão aqui
 		if (!userRepository.existsByUsername(authDTO.getLogin())) {
 			throw new UserNotFoundException(String.format("User not found by provided username: %s", authDTO.getLogin()));
 		}
@@ -80,10 +83,6 @@ public class UserService {
 
 	public void deleteAll() {
 		userRepository.deleteAll();
-	}
-
-	private void encodeUserPassword(User user) {
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
 	}
 
 }

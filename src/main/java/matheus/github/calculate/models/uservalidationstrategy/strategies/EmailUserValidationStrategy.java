@@ -1,8 +1,9 @@
-package matheus.github.calculate.models.uservalidationstrategy;
+package matheus.github.calculate.models.uservalidationstrategy.strategies;
 
 import matheus.github.calculate.dto.UserDTO;
 import matheus.github.calculate.exception.exceptions.user.EmailAlreadyExistsException;
 import matheus.github.calculate.exception.exceptions.user.InvalidUserException;
+import matheus.github.calculate.models.uservalidationstrategy.UserValidationStrategy;
 import matheus.github.calculate.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

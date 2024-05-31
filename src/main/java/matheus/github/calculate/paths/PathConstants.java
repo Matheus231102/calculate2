@@ -1,4 +1,4 @@
-package matheus.github.calculate.controllers.paths;
+package matheus.github.calculate.paths;
 
 public class PathConstants {
 	public static final String DEFAULT_FOOD_PATH = "/foods";

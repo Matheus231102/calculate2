@@ -15,6 +15,7 @@ public class UserMapper {
 	public UserDTO toDTO(User user) {
 		return modelMapper.map(user, UserDTO.class);
 	}
+	//todo passar AuthDTO para DTO
 
 	public User toEntity(UserDTO userDTO) {
 		return modelMapper.map(userDTO, User.class);

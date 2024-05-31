@@ -2,7 +2,6 @@ package matheus.github.calculate.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.restassured.http.ContentType;
 import matheus.github.calculate.dto.UserDTO;
 import matheus.github.calculate.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,14 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static io.restassured.RestAssured.given;
-import static matheus.github.calculate.controllers.paths.PathConstants.DEFAULT_USER_PATH;
-import static matheus.github.calculate.controllers.paths.PathConstants.REGISTER_PATH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)

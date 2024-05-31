@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static matheus.github.calculate.controllers.paths.PathConstants.DEFAULT_USER_PATH;
-import static matheus.github.calculate.controllers.paths.PathConstants.LOGIN_PATH;
+import static matheus.github.calculate.paths.PathConstants.DEFAULT_USER_PATH;
+import static matheus.github.calculate.paths.PathConstants.LOGIN_PATH;
 
 @RestController
 @RequestMapping(DEFAULT_USER_PATH)
