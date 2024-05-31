@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static matheus.github.calculate.paths.PathConstants.ADMIN_PATH;
 import static matheus.github.calculate.paths.PathConstants.DEFAULT_USER_PATH;
 
+
 @RestController
-@RequestMapping(DEFAULT_USER_PATH)
-public class UserController {
+@RequestMapping(DEFAULT_USER_PATH + ADMIN_PATH)
+public class UserAdminController {
 
 	@Autowired
 	private UserService userService;
@@ -24,13 +26,28 @@ public class UserController {
 	@Autowired
 	private AuthenticationContext authenticationContext;
 
-	@GetMapping
-	public ResponseEntity<User> getUserByToken() throws UserNotFoundException {
-		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		User user = userService.findByUsername(authenticatedUsername);
+	@GetMapping("/all")
+	public ResponseEntity<List<User>> getAllUsers() {
+		List<User> userList = userService.findAll();
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(userList);
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<User> getUserById(@PathVariable Long id) throws UserNotFoundException {
+		User user = userService.findById(id);
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(user);
+	}
+
+	@DeleteMapping("/all")
+	public ResponseEntity<String> deleteAllUsers() {
+		userService.deleteAll();
+		return ResponseEntity
+				.status(HttpStatus.NO_CONTENT)
+				.body("all users deleted successfully");
 	}
 
 }

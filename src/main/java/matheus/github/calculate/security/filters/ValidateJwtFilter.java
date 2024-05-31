@@ -20,12 +20,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static matheus.github.calculate.paths.PathConstants.*;
@@ -45,8 +47,8 @@ public class ValidateJwtFilter extends OncePerRequestFilter {
 	@Autowired
 	private CustomizedExceptionResponse customizedExceptionResponse;
 
-	@Qualifier("objectMapper")
 	@Autowired
+	@Qualifier("objectMapper")
 	private ObjectMapper objectMapper;
 
 	private static final String AUTHORIZATION_HEADER = "Authorization";
@@ -95,12 +97,14 @@ public class ValidateJwtFilter extends OncePerRequestFilter {
 				authorities);
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
+
+		authorities.forEach(authority -> System.out.println("Authority: " + authority.getAuthority()));
 		filterChain.doFilter(request, response);
 	}
 
 	private Collection<? extends GrantedAuthority> getAuthoritiesFromDecodedToken(DecodedJWT decodedJWT) {
-		String authoritiesClaim = decodedJWT.getClaim(JwtService.JWT_AUTHORITIES_CLAIM).asString();
-		return AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesClaim);
+		String authority = "ROLE_" + decodedJWT.getClaim(JwtService.JWT_AUTHORITY_CLAIM).asString();
+		return Collections.singletonList(new SimpleGrantedAuthority(authority));
 	}
 
 	private String getUsernameFromDecodedToken(DecodedJWT decodedJWT) {

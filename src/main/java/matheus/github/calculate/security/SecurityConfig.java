@@ -6,19 +6,22 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
 
+import static matheus.github.calculate.enums.Role.ADMIN;
 import static matheus.github.calculate.paths.PathConstants.*;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
-@EnableWebSecurity
 @Configuration
+@EnableWebSecurity
+//@EnableMethodSecurity
 public class SecurityConfig {
 
 	@Autowired
@@ -29,11 +32,12 @@ public class SecurityConfig {
 		return http
 				.csrf(AbstractHttpConfigurer::disable)
 				.cors(AbstractHttpConfigurer::disable)
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
 				.authorizeHttpRequests(
 						requests -> requests
 								.requestMatchers(DEFAULT_USER_PATH + LOGIN_PATH).permitAll()
 								.requestMatchers(DEFAULT_USER_PATH + REGISTER_PATH).permitAll()
+								.requestMatchers(DEFAULT_USER_PATH + ADMIN_PATH + "/**").hasRole(ADMIN.name())
 								.anyRequest().authenticated()
 				)
 				.addFilterBefore(validateJwtFilter, AuthorizationFilter.class)
@@ -53,3 +57,4 @@ public class SecurityConfig {
 	}
 
 }
+

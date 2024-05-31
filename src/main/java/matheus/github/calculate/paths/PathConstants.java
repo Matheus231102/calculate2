@@ -7,4 +7,5 @@ public class PathConstants {
 	public final static String REGISTER_PATH = "/register";
 	public static final String DEFAULT_MEAL_PATH = "/meals";
 	public static final String DEFAULT_MEALFOOD_PATH = "/mealfood";
+	public static final String ADMIN_PATH = "/admin";
 }

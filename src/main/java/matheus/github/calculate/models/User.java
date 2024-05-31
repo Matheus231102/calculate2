@@ -3,7 +3,7 @@ package matheus.github.calculate.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import matheus.github.calculate.enums.EnumRole;
+import matheus.github.calculate.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,7 +43,8 @@ public class User implements UserDetails {
 
 	@JsonIgnore
 	@Enumerated(EnumType.STRING)
-	private EnumRole role;
+	@Column(nullable = false)
+	private Role role;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -55,40 +56,16 @@ public class User implements UserDetails {
 
 	@PrePersist
 	private void onCreate() {
-		setRole(EnumRole.USER);
+		setRole(Role.USER);
 		setFoods(List.of());
 		setMeals(List.of());
 	}
 
-	//todo verificar como se implementa sistema de hierarquias de roles no spring security
 	@JsonIgnore
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		switch (this.getRole()) {
-			case MANAGER -> {
-				return List.of(
-						new SimpleGrantedAuthority("ROLE_MANAGER"),
-						new SimpleGrantedAuthority("ROLE_ADMIN"),
-						new SimpleGrantedAuthority("ROLE_USER")
-				);
-			}
-			case ADMIN -> {
-				return List.of(
-						new SimpleGrantedAuthority("ROLE_ADMIN"),
-						new SimpleGrantedAuthority("ROLE_USER")
-				);
-			}
-			case USER -> {
-				return List.of(
-						new SimpleGrantedAuthority("ROLE_USER")
-				);
-			}
-			case null, default -> {
-				return null;
-			}
-		}
+		return role.getAuthorities();
 	}
-
 
 	@JsonIgnore
 	@Override

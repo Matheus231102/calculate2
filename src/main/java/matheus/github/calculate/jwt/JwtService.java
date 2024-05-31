@@ -7,17 +7,16 @@ import matheus.github.calculate.exception.exceptions.user.UserNotFoundException;
 import matheus.github.calculate.jwt.algorithm.AlgorithmProvider;
 import matheus.github.calculate.models.User;
 import matheus.github.calculate.repositories.UserRepository;
+import matheus.github.calculate.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtService {
@@ -29,18 +28,19 @@ public class JwtService {
 	private AlgorithmProvider algorithmProvider;
 
     public static final String JWT_USERNAME_CLAIM = "username";
-    public static final String JWT_AUTHORITIES_CLAIM = "authorities";
+    public static final String JWT_AUTHORITY_CLAIM = "authorities";
     private final int HOURS_TO_INCREASE_THE_EXPIRATION_TIME = 8;
 
 	@Autowired
 	private UserRepository userRepository;
 
+	@Lazy
+	@Autowired
+	private UserService userService;
+
 	public String getToken(String username) throws UserNotFoundException {
-		Optional<User> optionalUser = userRepository.findByUsername(username);
-		if (optionalUser.isEmpty()) {
-			throw new UserNotFoundException("Userr not found by provided usename: " + username);
-		}
-		return generateToken(optionalUser.get());
+		User user = userService.findByUsername(username);
+		return generateToken(user);
 	}
 
     public String generateToken(User user) {
@@ -48,7 +48,7 @@ public class JwtService {
 		  return JWT.create()
 				.withIssuer(JWT_ISSUER)
 				.withClaim(JWT_USERNAME_CLAIM, user.getUsername())
-				.withClaim(JWT_AUTHORITIES_CLAIM, authoritiesToStringSeparetedComma(user.getAuthorities()) )
+				.withClaim(JWT_AUTHORITY_CLAIM, user.getRole().name())
 				.withExpiresAt(generateExpirationDate(HOURS_TO_INCREASE_THE_EXPIRATION_TIME))
 				.sign(algorithmProvider.getAlgorithm());
 
@@ -59,13 +59,7 @@ public class JwtService {
 	   }
     }
 
-    private String authoritiesToStringSeparetedComma(Collection<? extends GrantedAuthority> authorities) {
-	   return authorities.stream()
-			 .map(grantedAuthority -> grantedAuthority.toString())
-			 .collect(Collectors.joining(", "));
-    }
-
-    private Instant generateExpirationDate(int timeInHours) {
+	private Instant generateExpirationDate(int timeInHours) {
 	   return increaseExpirationHour(timeInHours).toInstant(ZoneOffset.of("-03:00"));
     }
 

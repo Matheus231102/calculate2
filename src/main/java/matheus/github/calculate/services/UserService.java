@@ -58,7 +58,7 @@ public class UserService {
 		return userRepository.findAll();
 	}
 
-	public User register(UserDTO userDTO) {
+	public User register(UserDTO userDTO) throws Exception {
 		userValidationStrategies.forEach(userValidationStrategy -> userValidationStrategy.execute(userDTO));
 		User user = userMapper.toEntity(userDTO);
 
@@ -69,7 +69,6 @@ public class UserService {
 	}
 
 	public String login(AuthDTO authDTO) throws UserNotFoundException {
-		//todo verificar se consigo utilizar algum padrão aqui
 		if (!userRepository.existsByUsername(authDTO.getLogin())) {
 			throw new UserNotFoundException(String.format("User not found by provided username: %s", authDTO.getLogin()));
 		}
