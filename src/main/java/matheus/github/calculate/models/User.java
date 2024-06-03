@@ -2,6 +2,7 @@ package matheus.github.calculate.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import matheus.github.calculate.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,19 +27,21 @@ public class User implements UserDetails {
 	@EqualsAndHashCode.Include
 	private Long id;
 
-	@Column(unique = true, nullable = false)
+	@Column(unique = true)
+	@NotEmpty(message = "The username must not be empty or null")
 	@EqualsAndHashCode.Include
 	private String username;
 
-	@Column(nullable = false)
+	@NotEmpty(message = "The name must not be empty or null")
 	private String name;
 
-	@Column(unique = true, nullable = false)
+	@NotEmpty(message = "The e-mail must not be empty or null")
+	@Column(unique = true)
 	@EqualsAndHashCode.Include
 	private String email;
 
 	@JsonIgnore
-	@Column(nullable = false)
+	@NotEmpty(message = "The password must not be empty or null")
 	private String password;
 
 	@JsonIgnore

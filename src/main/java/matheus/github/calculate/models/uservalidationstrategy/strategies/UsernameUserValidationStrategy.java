@@ -30,6 +30,5 @@ public class UsernameUserValidationStrategy implements UserValidationStrategy {
 			throw new UsernameAlreadyExistsException(String.format("An user with username %s already exists", userDTO.getUsername()));
 		}
 
-		System.out.println(String.format("Username: %s validated with success!", userDTO.getUsername()));
 	}
 }

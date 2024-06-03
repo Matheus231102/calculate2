@@ -1,7 +1,6 @@
 package matheus.github.calculate.dto;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -11,19 +10,15 @@ import lombok.*;
 @NoArgsConstructor
 public class UserDTO {
 
-	@NotNull
-	@NotEmpty
+	@NotEmpty(message = "The username must not be empty or null")
 	private String username;
 
-	@NotNull
-	@NotEmpty
+	@NotEmpty(message = "The name must not be empty or null")
 	private String name;
 
-	@NotNull
-	@NotEmpty
+	@NotEmpty(message = "The e-mail must not be empty or null")
 	private String email;
 
-	@NotNull
-	@NotEmpty
+	@NotEmpty(message = "The password must not be empty or null")
 	private String password;
 }
