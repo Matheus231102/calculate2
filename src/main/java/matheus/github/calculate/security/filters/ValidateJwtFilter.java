@@ -97,8 +97,6 @@ public class ValidateJwtFilter extends OncePerRequestFilter {
 				authorities);
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-
-		authorities.forEach(authority -> System.out.println("Authority: " + authority.getAuthority()));
 		filterChain.doFilter(request, response);
 	}
 

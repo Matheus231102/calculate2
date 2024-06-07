@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import matheus.github.calculate.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,19 +20,19 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class User implements UserDetails {
+public class User implements UserDetails, Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Long id;
 
-	@Column(unique = true)
 	@NotEmpty(message = "The username must not be empty or null")
+	@Column(unique = true)
 	@EqualsAndHashCode.Include
 	private String username;
 
-	@NotEmpty(message = "The name must not be empty or null")
+	@NotEmpty(message = "The lname must not be empty or nul")
 	private String name;
 
 	@NotEmpty(message = "The e-mail must not be empty or null")

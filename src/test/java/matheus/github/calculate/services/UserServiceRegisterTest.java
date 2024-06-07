@@ -72,9 +72,7 @@ public class UserServiceRegisterTest {
 		when(userRepository.save(user)).thenReturn(userWithId);
 
 		User sut = userService.register(userDTO);
-		assertThat(sut.getId()).isNotNull();
-		assertThat(sut.getId()).isNotNegative();
-		assertThat(sut.getId()).isNotZero();
+
 		assertThat(sut.getId()).isEqualTo(1);
 
 		assertThat(sut.getUsername()).isEqualTo(userDTO.getUsername());

@@ -2,18 +2,13 @@ package matheus.github.calculate.services;
 
 import matheus.github.calculate.dto.MealFoodDTO;
 import matheus.github.calculate.exception.exceptions.user.UserNotFoundException;
-import matheus.github.calculate.models.Food;
-import matheus.github.calculate.models.Meal;
-import matheus.github.calculate.models.MealFood;
-import matheus.github.calculate.models.User;
+import matheus.github.calculate.models.*;
 import matheus.github.calculate.repositories.MealFoodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-
 
 @Service
 public class MealFoodService {
@@ -32,32 +27,44 @@ public class MealFoodService {
 	private UserService userService;
 
 
-	public MealFood registerMealFoodByAuthUsername(String authenticatedUsername, MealFoodDTO mealFoodDTO) throws UserNotFoundException {
+	public MealFood registerMealFoodByUser(String authenticatedUsername, MealFoodDTO mealFoodDTO) throws UserNotFoundException {
 		long foodId = mealFoodDTO.getFoodId();
 		long mealId = mealFoodDTO.getMealId();
-		int foodAmount = mealFoodDTO.getFoodAmount();
 
-		Food food = foodService.getFoodByUserAndFoodId(authenticatedUsername, foodId);
-		Meal meal = mealService.getMealByAuthUsernameAndMealId(authenticatedUsername, mealId);
+		Food food = getFoodByUser(authenticatedUsername, foodId);
+		Meal meal = getMealByUser(authenticatedUsername, mealId);
 
-		MealFood mealFood = new MealFood();
-
-		meal.getMealFoods().add(mealFood);
-		food.getMealFoods().add(mealFood);
-
-		mealFood.setFood(food);
-		mealFood.setMeal(meal);
-		mealFood.setFoodAmount(foodAmount);
-
-		foodService.register(food);
-		mealService.register(meal);
+		MealFood mealFood = createMealFood(mealFoodDTO, meal, food);
 
 		return mealFoodRepository.save(mealFood);
 	}
 
-	public List<MealFood> getAllMealFoodByAuthUsername(String authenticatedName) throws UserNotFoundException {
+	public List<MealFood> getAllMealFoodByUser(String authenticatedName) throws UserNotFoundException {
 		User user = userService.findByUsername(authenticatedName);
 		return mealFoodRepository.findAllByUser(user);
+	}
+
+	public Food getFoodByUser(String authenticatedUsername, long foodId) throws UserNotFoundException {
+		return foodService.getFoodByUserAndFoodId(authenticatedUsername, foodId);
+	}
+
+	public Meal getMealByUser(String authenticatedUsername, long mealId) throws UserNotFoundException {
+		return mealService.getMealByAuthUsernameAndMealId(authenticatedUsername, mealId);
+	}
+
+	public MealFood createMealFood(MealFoodDTO mealFoodDTO, Meal meal, Food food) {
+		MealFoodId mealFoodId = new MealFoodId(mealFoodDTO.getMealId(), mealFoodDTO.getFoodId());
+		MealFood mealFood = new MealFood();
+
+		mealFood.setId(mealFoodId);
+		mealFood.setFood(food);
+		mealFood.setMeal(meal);
+		mealFood.setFoodAmount(mealFoodDTO.getFoodAmount());
+
+		meal.getMealFoods().add(mealFood);
+		food.getMealFoods().add(mealFood);
+
+		return mealFood;
 	}
 
 }

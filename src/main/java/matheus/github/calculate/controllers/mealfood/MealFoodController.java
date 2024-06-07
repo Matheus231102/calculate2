@@ -27,14 +27,14 @@ public class MealFoodController {
 	@GetMapping
 	public ResponseEntity<List<MealFood>> getAllMealFoodsByAuthUsername() throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		List<MealFood> mealFoodList = mealFoodService.getAllMealFoodByAuthUsername(authenticatedUsername);
+		List<MealFood> mealFoodList = mealFoodService.getAllMealFoodByUser(authenticatedUsername);
 		return ResponseEntity.ok(mealFoodList);
 	}
 
 	@PostMapping
 	public ResponseEntity<MealFood> insertFoodIntoMealByAuthUsername(@RequestBody @Valid MealFoodDTO mealFoodDTO) throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		MealFood mealFood = mealFoodService.registerMealFoodByAuthUsername(authenticatedUsername, mealFoodDTO);
+		MealFood mealFood = mealFoodService.registerMealFoodByUser(authenticatedUsername, mealFoodDTO);
 		return ResponseEntity.status(HttpStatus.CREATED).body(mealFood);
 	}
 

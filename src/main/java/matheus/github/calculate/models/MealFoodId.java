@@ -21,5 +21,4 @@ public class MealFoodId implements Serializable {
 	@Column(name = "food_id")
 	private long foodId;
 
-
 }
