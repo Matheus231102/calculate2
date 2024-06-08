@@ -37,9 +37,4 @@ public class Meal {
 		setMealFoods(List.of());
 	}
 
-	public void addMealFood(MealFood mealFood) {
-		mealFoods.add(mealFood);
-		mealFood.setMeal(this);
-	}
-
 }

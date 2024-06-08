@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -37,6 +38,9 @@ public class Food {
 	@Column(nullable = false)
 	private double fats;
 
+	@Column(nullable = false)
+	private BigDecimal price;
+
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
@@ -44,10 +48,5 @@ public class Food {
 	@JsonIgnore
 	@OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
 	private List<MealFood> mealFoods;
-
-	public void addMealFood(MealFood mealFood) {
-		mealFoods.add(mealFood);
-		mealFood.setFood(this);
-	}
 
 }

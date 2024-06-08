@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Builder
@@ -31,4 +33,10 @@ public class FoodDTO {
 	@NotNull
 	@DecimalMin(value = "0.0")
 	private double fats;
+
+	@NotNull
+	@DecimalMin(value = "0.0")
+	private BigDecimal price;
+
+
 }
