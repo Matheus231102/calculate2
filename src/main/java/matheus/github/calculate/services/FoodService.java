@@ -7,9 +7,7 @@ import matheus.github.calculate.mapper.food.FoodMapper;
 import matheus.github.calculate.models.Food;
 import matheus.github.calculate.models.User;
 import matheus.github.calculate.repositories.FoodRepository;
-import matheus.github.calculate.repositories.MealFoodRepository;
 import matheus.github.calculate.utils.FoodUtils;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,17 +27,6 @@ public class FoodService {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private MealFoodService mealFoodService;
-
-	@Autowired
-	private MealService mealService;
-
-	@Autowired
-	private MealFoodRepository mealFoodRepository;
-
-	@Autowired
-	private ModelMapper modelMapper;
 	@Autowired
 	private FoodUtils foodUtils;
 

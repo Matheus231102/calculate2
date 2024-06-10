@@ -8,7 +8,6 @@ import matheus.github.calculate.models.foodvalidationstrategy.FoodValidationStra
 import matheus.github.calculate.paths.PathConstants;
 import matheus.github.calculate.security.AuthenticationContext;
 import matheus.github.calculate.services.FoodService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

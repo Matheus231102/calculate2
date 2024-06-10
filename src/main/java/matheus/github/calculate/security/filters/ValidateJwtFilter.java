@@ -17,9 +17,9 @@ import matheus.github.calculate.exception.exceptions.InvalidAuthenticationHeader
 import matheus.github.calculate.jwt.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -47,11 +47,6 @@ public class ValidateJwtFilter extends OncePerRequestFilter {
 	@Autowired
 	private CustomizedExceptionResponse customizedExceptionResponse;
 
-	@Autowired
-	@Qualifier("objectMapper")
-	private ObjectMapper objectMapper;
-
-	private static final String AUTHORIZATION_HEADER = "Authorization";
 	private static final String BEARER_PREFIX = "Bearer ";
 
 	@Override
@@ -110,13 +105,13 @@ public class ValidateJwtFilter extends OncePerRequestFilter {
 	}
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
 	   List<String> paths = List.of(DEFAULT_USER_PATH + LOGIN_PATH, DEFAULT_USER_PATH + REGISTER_PATH);
 	   return paths.contains(request.getRequestURI());
     }
 
     private String extractTokenFromRequest(HttpServletRequest request) throws InvalidAuthenticationHeaderException, IOException {
-		String authorization = request.getHeader(AUTHORIZATION_HEADER);
+		String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
 
 		if (authorization == null || !authorization.startsWith(BEARER_PREFIX)) {
 			throw new InvalidAuthenticationHeaderException("Missing Authorization header");
