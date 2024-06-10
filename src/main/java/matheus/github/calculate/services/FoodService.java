@@ -8,10 +8,13 @@ import matheus.github.calculate.models.Food;
 import matheus.github.calculate.models.User;
 import matheus.github.calculate.repositories.FoodRepository;
 import matheus.github.calculate.repositories.MealFoodRepository;
+import matheus.github.calculate.utils.FoodUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -35,9 +38,10 @@ public class FoodService {
 	@Autowired
 	private MealFoodRepository mealFoodRepository;
 
-	public Food register(Food food) {
-		return foodRepository.save(food);
-	}
+	@Autowired
+	private ModelMapper modelMapper;
+	@Autowired
+	private FoodUtils foodUtils;
 
 	public Food registerFoodByUser(String authenticatedName, FoodDTO foodDTO) throws UserNotFoundException {
 		User user = userService.findByUsername(authenticatedName);
@@ -45,7 +49,14 @@ public class FoodService {
 		registerFoodToUser(food, user);
 		return foodRepository.save(food);
 	}
-	
+
+	public Food updateFoodByUser(String authenticatedName, Map<String, Object> properties, Long id) throws UserNotFoundException {
+		Food food = getFoodByUserAndFoodId(authenticatedName, id);
+
+		Food updatedFood = foodUtils.updateFoodProperties(properties, food);
+		return foodRepository.save(updatedFood);
+	}
+
 	public List<Food> getAllFoodsByUser(String authenticatedUsername) throws UserNotFoundException {
 		User user = userService.findByUsername(authenticatedUsername);
 		return foodRepository.findAllByUser(user);

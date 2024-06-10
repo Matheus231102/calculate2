@@ -58,7 +58,7 @@ public class UserService {
 		return userRepository.findAll();
 	}
 
-	public User register(UserDTO userDTO) throws Exception {
+	public User register(UserDTO userDTO) {
 		userValidationStrategies.forEach(userValidationStrategy -> userValidationStrategy.execute(userDTO));
 		User user = userMapper.toEntity(userDTO);
 

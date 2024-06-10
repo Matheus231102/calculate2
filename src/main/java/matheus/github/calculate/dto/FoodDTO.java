@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Builder
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class FoodDTO {
@@ -34,9 +35,6 @@ public class FoodDTO {
 	@DecimalMin(value = "0.0")
 	private double fats;
 
-	@NotNull
-	@DecimalMin(value = "0.0")
 	private BigDecimal price;
-
 
 }

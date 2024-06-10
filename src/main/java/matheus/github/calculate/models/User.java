@@ -32,7 +32,7 @@ public class User implements UserDetails, Serializable {
 	@EqualsAndHashCode.Include
 	private String username;
 
-	@NotEmpty(message = "The lname must not be empty or nul")
+	@NotEmpty(message = "The name must not be empty or nul")
 	private String name;
 
 	@NotEmpty(message = "The e-mail must not be empty or null")
