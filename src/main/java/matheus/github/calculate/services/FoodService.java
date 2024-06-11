@@ -11,6 +11,7 @@ import matheus.github.calculate.utils.FoodUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,6 +36,19 @@ public class FoodService {
 		Food food = foodMapper.toEntity(foodDTO);
 		registerFoodToUser(food, user);
 		return foodRepository.save(food);
+	}
+
+	public List<Food> registerFoodsByUser(String authenticatedName, List<FoodDTO> foodDTOList) throws UserNotFoundException {
+		User user = userService.findByUsername(authenticatedName);
+		List<Food> foodList = new ArrayList<>();
+
+		for (FoodDTO foodDTO : foodDTOList) {
+			Food food = foodMapper.toEntity(foodDTO);
+			foodList.add(food);
+			registerFoodToUser(food, user);
+		}
+
+		return foodRepository.saveAll(foodList);
 	}
 
 	public Food updateFoodByUser(String authenticatedName, Map<String, Object> properties, Long id) throws UserNotFoundException {

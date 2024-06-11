@@ -8,6 +8,7 @@ import matheus.github.calculate.models.foodvalidationstrategy.FoodValidationStra
 import matheus.github.calculate.paths.PathConstants;
 import matheus.github.calculate.security.AuthenticationContext;
 import matheus.github.calculate.services.FoodService;
+import matheus.github.calculate.services.MealFoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,9 @@ public class FoodController {
 	@Autowired
 	private List<FoodValidationStrategy> foodValidationStrategies;
 
+	@Autowired
+	private MealFoodService mealFoodService;
+
 	@PostMapping
 	public ResponseEntity<Food> registerFood(@RequestBody @Valid FoodDTO foodDTO) throws UserNotFoundException {
 		foodValidationStrategies.forEach(foodValidationStrategy -> foodValidationStrategy.execute(foodDTO));
@@ -39,11 +43,21 @@ public class FoodController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(food);
 	}
 
+	@PostMapping("/list")
+	public ResponseEntity<List<Food>> registerFoods(@RequestBody @Valid List<FoodDTO> foodDTOList) throws UserNotFoundException {
+		foodDTOList.forEach(foodDto -> {
+			foodValidationStrategies.forEach(foodValidationStrategy -> foodValidationStrategy.execute(foodDto));
+		});
+
+		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
+		List<Food> foodList = foodService.registerFoodsByUser(authenticatedUsername, foodDTOList);
+		return ResponseEntity.status(HttpStatus.CREATED).body(foodList);
+	}
+
 	@PatchMapping("/{id}")
 	public ResponseEntity<Food> updateFood(@RequestBody Map<String, Object> fields , @PathVariable Long id) throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
 		Food food = foodService.updateFoodByUser(authenticatedUsername, fields, id);
-
 		return ResponseEntity.ok(food);
 	}
 
@@ -64,6 +78,7 @@ public class FoodController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteFood(@PathVariable long id) throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
+		mealFoodService.deleteMealFoodByUserAndFoodId(authenticatedUsername, id);
 		foodService.deleteFoodByUserAndFoodId(authenticatedUsername, id);
 		return ResponseEntity.noContent().build();
 	}

@@ -1,5 +1,6 @@
 package matheus.github.calculate.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 @Table(name = "tb_meals_foods")
 public class MealFood {
 
+	@JsonIgnore
 	@EmbeddedId
 	private MealFoodId id;
 

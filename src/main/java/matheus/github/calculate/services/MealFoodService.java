@@ -39,6 +39,10 @@ public class MealFoodService {
 		return mealFoodRepository.save(mealFood);
 	}
 
+	public void deleteMealFoodByUserAndFoodId(String authenticatedName,long foodId) {
+		mealFoodRepository.deleteAllByUserAndFoodId(authenticatedName, foodId);
+	}
+
 	public List<MealFood> getAllMealFoodByUser(String authenticatedName) throws UserNotFoundException {
 		User user = userService.findByUsername(authenticatedName);
 		return mealFoodRepository.findAllByUser(user);
