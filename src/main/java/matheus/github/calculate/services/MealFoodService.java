@@ -1,7 +1,9 @@
 package matheus.github.calculate.services;
 
 import matheus.github.calculate.dto.MealFoodDTO;
+import matheus.github.calculate.exception.exceptions.MealFoodNotFoundException;
 import matheus.github.calculate.exception.exceptions.user.UserNotFoundException;
+import matheus.github.calculate.mapper.mealfood.MealFoodMapper;
 import matheus.github.calculate.models.*;
 import matheus.github.calculate.repositories.MealFoodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,6 @@ public class MealFoodService {
 
 	@Autowired
 	private UserService userService;
-
 
 	public MealFood addMealFood(String authenticatedUsername, MealFoodDTO mealFoodDTO) throws UserNotFoundException {
 		long foodId = mealFoodDTO.getFoodId();
@@ -54,6 +55,25 @@ public class MealFoodService {
 	public List<MealFood> getAllMealFood(String authenticatedUsername) throws UserNotFoundException {
 		User user = userService.getUser(authenticatedUsername);
 		return mealFoodRepository.findAllByUser(user);
+	}
+
+	public MealFood updateMealFood(String authenticatedUsername, MealFoodDTO mealFoodDTO) throws UserNotFoundException, MealFoodNotFoundException {
+		User user = userService.getUser(authenticatedUsername);
+		Food food = getFood(authenticatedUsername, mealFoodDTO.getFoodId());
+		Meal meal = getMeal(authenticatedUsername, mealFoodDTO.getMealId());
+		int foodAmount = mealFoodDTO.getFoodAmount();
+
+		boolean exists = mealFoodRepository.existsByUserAndMealAndFood(user, meal, food);
+		if (!exists) {
+			throw new MealFoodNotFoundException(String.format("MealFood not found by provided Meal id: %s and Food id: %s", meal.getId(), food.getId()));
+		}
+
+		MealFoodId mealFoodId = new MealFoodId(mealFoodDTO.getMealId(), mealFoodDTO.getFoodId());
+
+		MealFood mealFood = mealFoodRepository.findById(mealFoodId);
+		mealFood.setFoodAmount(foodAmount);
+
+		return mealFoodRepository.save(mealFood);
 	}
 
 	public Food getFood(String authenticatedUsername, long foodId) throws UserNotFoundException {

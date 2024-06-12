@@ -1,6 +1,7 @@
 package matheus.github.calculate.controllers.mealfood;
 
 import jakarta.validation.Valid;
+import matheus.github.calculate.exception.exceptions.MealFoodNotFoundException;
 import matheus.github.calculate.paths.PathConstants;
 import matheus.github.calculate.dto.MealFoodDTO;
 import matheus.github.calculate.exception.exceptions.user.UserNotFoundException;
@@ -38,11 +39,18 @@ public class MealFoodController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(mealFood);
 	}
 
-	@DeleteMapping("/meal/{mealid}/food/{foodid}")
-	public ResponseEntity<Void> deleteMealFood(@PathVariable long mealid, @PathVariable long foodid) throws UserNotFoundException {
+	@DeleteMapping
+	public ResponseEntity<Void> deleteMealFood(@RequestParam("meal") long mealid, @RequestParam("food") long foodid) throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
 		mealFoodService.deleteMealFood(authenticatedUsername, mealid, foodid);
 		return ResponseEntity.noContent().build();
+	}
+
+	@PatchMapping
+	public ResponseEntity<MealFood> updateMealFood(@RequestBody @Valid MealFoodDTO mealFoodDTO) throws UserNotFoundException, MealFoodNotFoundException {
+		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
+		MealFood mealFood = mealFoodService.updateMealFood(authenticatedUsername, mealFoodDTO);
+		return ResponseEntity.ok(mealFood);
 	}
 
 }
