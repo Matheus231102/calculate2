@@ -30,15 +30,12 @@ public class JwtService {
     public static final String JWT_AUTHORITY_CLAIM = "authorities";
     private final int HOURS_TO_INCREASE_THE_EXPIRATION_TIME = 8;
 
-	@Autowired
-	private UserRepository userRepository;
-
 	@Lazy
 	@Autowired
 	private UserService userService;
 
 	public String getToken(String username) throws UserNotFoundException {
-		User user = userService.findByUsername(username);
+		User user = userService.getUser(username);
 		return generateToken(user);
 	}
 

@@ -27,33 +27,41 @@ public class MealFoodService {
 	private UserService userService;
 
 
-	public MealFood registerMealFoodByUser(String authenticatedUsername, MealFoodDTO mealFoodDTO) throws UserNotFoundException {
+	public MealFood addMealFood(String authenticatedUsername, MealFoodDTO mealFoodDTO) throws UserNotFoundException {
 		long foodId = mealFoodDTO.getFoodId();
 		long mealId = mealFoodDTO.getMealId();
 
-		Food food = getFoodByUser(authenticatedUsername, foodId);
-		Meal meal = getMealByUser(authenticatedUsername, mealId);
+		Food food = getFood(authenticatedUsername, foodId);
+		Meal meal = getMeal(authenticatedUsername, mealId);
 
 		MealFood mealFood = createMealFood(mealFoodDTO, meal, food);
 
 		return mealFoodRepository.save(mealFood);
 	}
 
-	public void deleteMealFoodByUserAndFoodId(String authenticatedName,long foodId) {
-		mealFoodRepository.deleteAllByUserAndFoodId(authenticatedName, foodId);
+	public void deleteMealFood(String authenticatedUsername, long foodId) throws UserNotFoundException {
+		// vericar existencia
+		User user = userService.getUser(authenticatedUsername);
+		mealFoodRepository.deleteAllByUserAndFoodId(user, foodId);
 	}
 
-	public List<MealFood> getAllMealFoodByUser(String authenticatedName) throws UserNotFoundException {
-		User user = userService.findByUsername(authenticatedName);
+	public void deleteMealFood(String authenticatedUsername, long mealid, long foodid) throws UserNotFoundException {
+		// vericar existencia
+		User user = userService.getUser(authenticatedUsername);
+		mealFoodRepository.deleteAllByUserAndMealIdAndFoodId(user, mealid, foodid);
+	}
+
+	public List<MealFood> getAllMealFood(String authenticatedUsername) throws UserNotFoundException {
+		User user = userService.getUser(authenticatedUsername);
 		return mealFoodRepository.findAllByUser(user);
 	}
 
-	public Food getFoodByUser(String authenticatedUsername, long foodId) throws UserNotFoundException {
-		return foodService.getFoodByUserAndFoodId(authenticatedUsername, foodId);
+	public Food getFood(String authenticatedUsername, long foodId) throws UserNotFoundException {
+		return foodService.getFood(authenticatedUsername, foodId);
 	}
 
-	public Meal getMealByUser(String authenticatedUsername, long mealId) throws UserNotFoundException {
-		return mealService.getMealByAuthUsernameAndMealId(authenticatedUsername, mealId);
+	public Meal getMeal(String authenticatedUsername, long mealId) throws UserNotFoundException {
+		return mealService.getMeal(authenticatedUsername, mealId);
 	}
 
 	public MealFood createMealFood(MealFoodDTO mealFoodDTO, Meal meal, Food food) {

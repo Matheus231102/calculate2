@@ -25,17 +25,24 @@ public class MealFoodController {
 	private MealFoodService mealFoodService;
 
 	@GetMapping
-	public ResponseEntity<List<MealFood>> getAllMealFoodsByAuthUsername() throws UserNotFoundException {
+	public ResponseEntity<List<MealFood>> getAllMealFood() throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		List<MealFood> mealFoodList = mealFoodService.getAllMealFoodByUser(authenticatedUsername);
+		List<MealFood> mealFoodList = mealFoodService.getAllMealFood(authenticatedUsername);
 		return ResponseEntity.ok(mealFoodList);
 	}
 
 	@PostMapping
-	public ResponseEntity<MealFood> insertFoodIntoMealByAuthUsername(@RequestBody @Valid MealFoodDTO mealFoodDTO) throws UserNotFoundException {
+	public ResponseEntity<MealFood> addMealFood(@RequestBody @Valid MealFoodDTO mealFoodDTO) throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		MealFood mealFood = mealFoodService.registerMealFoodByUser(authenticatedUsername, mealFoodDTO);
+		MealFood mealFood = mealFoodService.addMealFood(authenticatedUsername, mealFoodDTO);
 		return ResponseEntity.status(HttpStatus.CREATED).body(mealFood);
+	}
+
+	@DeleteMapping("/meal/{mealid}/food/{foodid}")
+	public ResponseEntity<Void> deleteMealFood(@PathVariable long mealid, @PathVariable long foodid) throws UserNotFoundException {
+		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
+		mealFoodService.deleteMealFood(authenticatedUsername, mealid, foodid);
+		return ResponseEntity.noContent().build();
 	}
 
 }

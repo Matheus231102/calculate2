@@ -1,10 +1,8 @@
 package matheus.github.calculate.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import matheus.github.calculate.dto.AuthDTO;
 import matheus.github.calculate.exception.exceptions.user.UserNotFoundException;
-import matheus.github.calculate.models.User;
 import matheus.github.calculate.services.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,10 +40,10 @@ public class UserLoginControllerTest {
 	}
 
 	@Test
-	void loginUser_WithUnexistingUsername_ReturnsException() throws Exception {
+	void login_User_WithUnexistingUsername_ReturnsException() throws Exception {
 		AuthDTO authDTO = new AuthDTO("Unexisting Login", "default password");
 
-		when(userService.login(eq(authDTO))).thenThrow(new UserNotFoundException(String.format("User not found by provided username: %s ", authDTO.getLogin())));
+		when(userService.loginUser(eq(authDTO))).thenThrow(new UserNotFoundException(String.format("User not found by provided username: %s ", authDTO.getLogin())));
 
 		ResultActions perform = mockMvc.perform(post("/users/login")
 			.contentType(MediaType.APPLICATION_JSON)
@@ -62,11 +60,11 @@ public class UserLoginControllerTest {
 	}
 
 	@Test
-	void loginUser_WithAuthData_ReturnJwtInHeader() throws Exception {
+	void login_User_WithAuthData_ReturnJwtInHeader() throws Exception {
 		AuthDTO authDTO = new AuthDTO("Unexisting Login", "default password");
 
 		String token = "token";
-		when(userService.login(eq(authDTO))).thenReturn(token);
+		when(userService.loginUser(eq(authDTO))).thenReturn(token);
 
 		ResultActions perform = mockMvc.perform(post("/users/login")
 			.contentType(MediaType.APPLICATION_JSON)

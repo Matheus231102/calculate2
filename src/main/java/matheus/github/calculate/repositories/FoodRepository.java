@@ -5,6 +5,7 @@ import matheus.github.calculate.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +21,12 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
 	@Transactional
 	@Modifying
 	@Query("DELETE FROM Food f WHERE f.user = :user")
-	void deleteAllByUser(User user);
+	void deleteAllByUser(@Param("user") User user);
 
 	@Transactional
 	@Modifying
-	@Query("DELETE FROM Food f WHERE f.id = :id and f.user = :user")
-	void deleteByUserAndId(User user, Long id);
+	@Query("DELETE FROM Food f WHERE f.id = :foodid and f.user = :user")
+	void deleteByUserAndFoodId(@Param("user") User user, @Param("foodid") Long foodid);
 
 	boolean existsByUserAndId(User user, Long id);
 

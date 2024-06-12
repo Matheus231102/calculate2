@@ -35,51 +35,51 @@ public class FoodController {
 	private MealFoodService mealFoodService;
 
 	@PostMapping
-	public ResponseEntity<Food> registerFood(@RequestBody @Valid FoodDTO foodDTO) throws UserNotFoundException {
+	public ResponseEntity<Food> addFood(@RequestBody @Valid FoodDTO foodDTO) throws UserNotFoundException {
 		foodValidationStrategies.forEach(foodValidationStrategy -> foodValidationStrategy.execute(foodDTO));
 
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		Food food = foodService.registerFoodByUser(authenticatedUsername, foodDTO);
+		Food food = foodService.addFood(authenticatedUsername, foodDTO);
 		return ResponseEntity.status(HttpStatus.CREATED).body(food);
 	}
 
 	@PostMapping("/list")
-	public ResponseEntity<List<Food>> registerFoods(@RequestBody @Valid List<FoodDTO> foodDTOList) throws UserNotFoundException {
+	public ResponseEntity<List<Food>> addFood(@RequestBody @Valid List<FoodDTO> foodDTOList) throws UserNotFoundException {
 		foodDTOList.forEach(foodDto -> {
 			foodValidationStrategies.forEach(foodValidationStrategy -> foodValidationStrategy.execute(foodDto));
 		});
 
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		List<Food> foodList = foodService.registerFoodsByUser(authenticatedUsername, foodDTOList);
+		List<Food> foodList = foodService.addFood(authenticatedUsername, foodDTOList);
 		return ResponseEntity.status(HttpStatus.CREATED).body(foodList);
 	}
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<Food> updateFood(@RequestBody Map<String, Object> fields , @PathVariable Long id) throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		Food food = foodService.updateFoodByUser(authenticatedUsername, fields, id);
+		Food food = foodService.updateFood(authenticatedUsername, fields, id);
 		return ResponseEntity.ok(food);
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Food>> getAllFoods() throws UserNotFoundException {
+	public ResponseEntity<List<Food>> getAllFood() throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		List<Food> foodList = foodService.getAllFoodsByUser(authenticatedUsername);
+		List<Food> foodList = foodService.getAllFood(authenticatedUsername);
 		return ResponseEntity.ok(foodList);
 	}
 
 	@DeleteMapping
-	public ResponseEntity<Void> deleteAllFoods() throws UserNotFoundException {
+	public ResponseEntity<Void> deleteAllFood() throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		foodService.deleteAllFoodsByUser(authenticatedUsername);
+		foodService.deleteAllFood(authenticatedUsername);
 		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteFood(@PathVariable long id) throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		mealFoodService.deleteMealFoodByUserAndFoodId(authenticatedUsername, id);
-		foodService.deleteFoodByUserAndFoodId(authenticatedUsername, id);
+		mealFoodService.deleteMealFood(authenticatedUsername, id);
+		foodService.deleteFood(authenticatedUsername, id);
 		return ResponseEntity.noContent().build();
 	}
 

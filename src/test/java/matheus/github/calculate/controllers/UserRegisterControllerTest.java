@@ -61,10 +61,10 @@ public class UserRegisterControllerTest {
 
 	@Test
 	@WithAnonymousUser
-	void registerUser_WithCorrectData_ReturnsUserAndJwt() throws Exception {
+	void addUserUser_WithCorrectData_ReturnsAndJwt() throws Exception {
 		String token = "token";
 
-		when(userService.register(eq(userDTO))).thenReturn(user);
+		when(userService.addUser(eq(userDTO))).thenReturn(user);
 		when(jwtService.generateToken(eq(user))).thenReturn(token);
 
 		ResultActions perform = mockMvc.perform(post("/users/register")

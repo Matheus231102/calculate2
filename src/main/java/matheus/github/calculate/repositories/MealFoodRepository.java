@@ -15,14 +15,20 @@ import java.util.List;
 public interface MealFoodRepository extends JpaRepository<MealFood, Long> {
 
 	@Query("""
-			SELECT mf FROM MealFood mf 
-			INNER JOIN mf.food f 
-			INNER JOIN mf.meal.user 
+			SELECT mf FROM MealFood mf
+			INNER JOIN mf.food f
+			INNER JOIN mf.meal.user
 			""")
 	List<MealFood> findAllByUser(@Param("user") User user);
 
+	// Usada no caso em que o Food é removido e o MealFood associados precisam ser removidos em cascata
 	@Transactional
 	@Modifying
-	@Query("DELETE FROM MealFood mf WHERE mf.food.id = :id AND mf.food.user.username = :username")
-	void deleteAllByUserAndFoodId(@Param("username") String username, @Param("id") long id);
+	@Query("DELETE FROM MealFood mf WHERE mf.food.id = :foodid AND mf.food.user = :user")
+	void deleteAllByUserAndFoodId(@Param("user") User user, @Param("foodid") long id);
+
+	@Transactional
+	@Modifying
+	@Query("DELETE FROM MealFood mf WHERE mf.food.user = :user AND mf.meal.id = :mealid AND mf.food.id = :foodid")
+	void deleteAllByUserAndMealIdAndFoodId(@Param("user") User user, @Param("mealid") long mealId, @Param("foodid") long foodId);
 }

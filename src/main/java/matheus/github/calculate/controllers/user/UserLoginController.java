@@ -24,7 +24,7 @@ public class UserLoginController {
 
 	@PostMapping(LOGIN_PATH)
 	public ResponseEntity<String> loginUser(@RequestBody @Valid AuthDTO authDTO) throws UserNotFoundException {
-		String token = userService.login(authDTO);
+		String token = userService.loginUser(authDTO);
 
 		return ResponseEntity
 				.status(HttpStatus.OK)

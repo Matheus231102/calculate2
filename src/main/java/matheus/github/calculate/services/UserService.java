@@ -38,7 +38,7 @@ public class UserService {
 	@Autowired
 	private List<UserValidationStrategy> userValidationStrategies;
 
-	public User findById(Long id) throws UserNotFoundException {
+	public User getUser(Long id) throws UserNotFoundException {
 		Optional<User> optionalUser = userRepository.findById(id);
 		if (optionalUser.isEmpty()) {
 			throw new UserNotFoundException("User not found by provided id: " + id);
@@ -46,7 +46,7 @@ public class UserService {
 		return optionalUser.get();
 	}
 
-	public User findByUsername(String username) throws UserNotFoundException {
+	public User getUser(String username) throws UserNotFoundException {
 		Optional<User> optionalUser = userRepository.findByUsername(username);
 		if (optionalUser.isEmpty()) {
 			throw new UserNotFoundException(String.format("User not found by provided username: %s", username));
@@ -54,11 +54,11 @@ public class UserService {
 		return optionalUser.get();
 	}
 
-	public List<User> findAll() {
+	public List<User> getAllUser() {
 		return userRepository.findAll();
 	}
 
-	public User register(UserDTO userDTO) {
+	public User addUser(UserDTO userDTO) {
 		userValidationStrategies.forEach(userValidationStrategy -> userValidationStrategy.execute(userDTO));
 		User user = userMapper.toEntity(userDTO);
 
@@ -68,7 +68,7 @@ public class UserService {
 		return userRepository.save(user);
 	}
 
-	public String login(AuthDTO authDTO) throws UserNotFoundException {
+	public String loginUser(AuthDTO authDTO) throws UserNotFoundException {
 		if (!userRepository.existsByUsername(authDTO.getLogin())) {
 			throw new UserNotFoundException(String.format("User not found by provided username: %s", authDTO.getLogin()));
 		}
@@ -80,7 +80,7 @@ public class UserService {
 		return jwtService.getToken(authDTO.getLogin());
 	}
 
-	public void deleteAll() {
+	public void deleteAllUser() {
 		userRepository.deleteAll();
 	}
 

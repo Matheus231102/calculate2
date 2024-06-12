@@ -7,7 +7,6 @@ import matheus.github.calculate.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,20 +22,17 @@ public class UserAdminController {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private AuthenticationContext authenticationContext;
-
 	@GetMapping("/all")
 	public ResponseEntity<List<User>> getAllUsers() {
-		List<User> userList = userService.findAll();
+		List<User> userList = userService.getAllUser();
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(userList);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<User> getUserById(@PathVariable Long id) throws UserNotFoundException {
-		User user = userService.findById(id);
+	public ResponseEntity<User> getUser(@PathVariable Long id) throws UserNotFoundException {
+		User user = userService.getUser(id);
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(user);
@@ -44,7 +40,7 @@ public class UserAdminController {
 
 	@DeleteMapping("/all")
 	public ResponseEntity<String> deleteAllUsers() {
-		userService.deleteAll();
+		userService.deleteAllUser();
 		return ResponseEntity
 				.status(HttpStatus.NO_CONTENT)
 				.body("all users deleted successfully");

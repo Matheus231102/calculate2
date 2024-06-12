@@ -67,11 +67,11 @@ public class UserServiceRegisterTest {
 	}
 
 	@Test
-	void registerUser_WithCorrectDTO_ReturnsUser() throws Exception {
+	void addUserUser_WithCorrectDTO_ReturnsUser() throws Exception {
 		when(userMapper.toEntity(userDTO)).thenReturn(user);
 		when(userRepository.save(user)).thenReturn(userWithId);
 
-		User sut = userService.register(userDTO);
+		User sut = userService.addUser(userDTO);
 
 		assertThat(sut.getId()).isEqualTo(1);
 
@@ -82,37 +82,37 @@ public class UserServiceRegisterTest {
 	}
 
 	@Test
-	void registerUser_WithUsernameLowerThan4_ThrowsException() throws Exception {
+	void addUserUser_WithUsernameLowerThan4_ThrowsException() throws Exception {
 		userDTO.setUsername("INV");
 		when(userMapper.toEntity(userDTO)).thenReturn(user);
 
-		assertThatThrownBy(() -> userService.register(userDTO)).isInstanceOf(InvalidUserException.class);
+		assertThatThrownBy(() -> userService.addUser(userDTO)).isInstanceOf(InvalidUserException.class);
 	}
 
 	@Test
-	void registerUser_UsernameContainsSpace_ThrowsException() {
+	void addUserUser_UsernameContainsSpace_ThrowsException() {
 		userDTO.setUsername("INV TESTE");
 		when(userMapper.toEntity(userDTO)).thenReturn(user);
 
-		assertThatThrownBy(() -> userService.register(userDTO)).isInstanceOf(InvalidUserException.class);
+		assertThatThrownBy(() -> userService.addUser(userDTO)).isInstanceOf(InvalidUserException.class);
 	}
 
 	@Test
-	void registerUser_WithExistingUsername_ThrowsException() {
+	void addUserUser_WithExistingUsername_ThrowsException() {
 		userDTO.setUsername("ExistingUsername");
 
 		when(userMapper.toEntity(userDTO)).thenReturn(user);
 		when(userRepository.existsByUsername("ExistingUsername")).thenReturn(true);
 
-		assertThatThrownBy(() -> userService.register(userDTO)).isInstanceOf(UsernameAlreadyExistsException.class);
+		assertThatThrownBy(() -> userService.addUser(userDTO)).isInstanceOf(UsernameAlreadyExistsException.class);
 	}
 
 	@Test
-	void registerUser_WithInvalidEmail_ThrowsException() {
+	void addUserUser_WithInvalidEmail_ThrowsException() {
 		userDTO.setEmail("invalid-email");
 		when(userMapper.toEntity(userDTO)).thenReturn(user);
 
-		assertThatThrownBy(() -> userService.register(userDTO)).isInstanceOf(InvalidUserException.class);
+		assertThatThrownBy(() -> userService.addUser(userDTO)).isInstanceOf(InvalidUserException.class);
 	}
 
 }

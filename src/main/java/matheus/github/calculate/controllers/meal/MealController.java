@@ -26,20 +26,17 @@ public class MealController {
 	@Autowired
 	private AuthenticationContext authenticationContext;
 
-	@Autowired
-	private UserService userService;
-
 	@PostMapping
-	public ResponseEntity<Meal> registerMeal(@RequestBody @Valid MealDTO mealDTO) throws UserNotFoundException {
+	public ResponseEntity<Meal> addMeal(@RequestBody @Valid MealDTO mealDTO) throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		Meal meal = mealService.registerByAuthenticatedName(authenticatedUsername, mealDTO);
+		Meal meal = mealService.addMeal(authenticatedUsername, mealDTO);
 		return ResponseEntity.status(HttpStatus.CREATED).body(meal);
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Meal>> getAllMeals() throws UserNotFoundException {
+	public ResponseEntity<List<Meal>> getAllMeal() throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		List<Meal> mealList = mealService.getAllMealsByAuthenticatedName(authenticatedUsername);
+		List<Meal> mealList = mealService.getAllMeal(authenticatedUsername);
 		return ResponseEntity.status(HttpStatus.OK).body(mealList);
 	}
 

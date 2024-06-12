@@ -27,8 +27,8 @@ public class UserRegisterController {
 	private JwtService jwtService;
 
 	@PostMapping(REGISTER_PATH)
-	public ResponseEntity<User> registerUser(@RequestBody @Valid UserDTO userDTO) throws Exception {
-		User user = userService.register(userDTO);
+	public ResponseEntity<User> addUser(@RequestBody @Valid UserDTO userDTO) throws Exception {
+		User user = userService.addUser(userDTO);
 		String token = jwtService.generateToken(user);
 		return ResponseEntity
 				.status(HttpStatus.CREATED)

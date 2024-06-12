@@ -7,10 +7,7 @@ import matheus.github.calculate.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static matheus.github.calculate.paths.PathConstants.DEFAULT_USER_PATH;
 
@@ -25,9 +22,9 @@ public class UserController {
 	private AuthenticationContext authenticationContext;
 
 	@GetMapping
-	public ResponseEntity<User> getUserByToken() throws UserNotFoundException {
+	public ResponseEntity<User> getUser() throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		User user = userService.findByUsername(authenticatedUsername);
+		User user = userService.getUser(authenticatedUsername);
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(user);

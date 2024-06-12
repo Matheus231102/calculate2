@@ -75,10 +75,10 @@ class UserServiceTest {
 	}
 
 	@Test
-	void findById_WithExistingId_returnsUser() throws UserNotFoundException {
+	void get_User_returnsUser() throws UserNotFoundException {
 		when(userRepository.findById(VALID_ID)).thenReturn(Optional.of(VALID_USER));
 
-		User sut = userService.findById(VALID_ID);
+		User sut = userService.getUser(VALID_ID);
 
 		assertThat(sut).isEqualTo(VALID_USER);
 		assertThat(sut.getUsername()).isEqualTo(VALID_USER.getUsername());
@@ -86,35 +86,35 @@ class UserServiceTest {
 	}
 
 	@Test
-	void findById_WithUnexistingId_ThrowException() throws UserNotFoundException {
+	void get_User_ThrowException() throws UserNotFoundException {
 		when(userRepository.findById(INVALID_ID)).thenReturn(Optional.empty());
 
-		assertThatThrownBy(() -> userService.findById(INVALID_ID)).isInstanceOf(UserNotFoundException.class);
+		assertThatThrownBy(() -> userService.getUser(INVALID_ID)).isInstanceOf(UserNotFoundException.class);
 	}
 
 	@Test
-	void findByUsername_WithExistingUsername_ReturnsUser() throws UserNotFoundException {
+	void get_User_ReturnsUser() throws UserNotFoundException {
 		when(userRepository.findByUsername(VALID_USER.getUsername())).thenReturn(Optional.of(VALID_USER));
 
-		User sut = userService.findByUsername(VALID_USER.getUsername());
+		User sut = userService.getUser(VALID_USER.getUsername());
 
 		assertThat(sut).isEqualTo(VALID_USER);
 		assertThat(sut.getUsername()).isEqualTo(VALID_USER.getUsername());
 	}
 
 	@Test
-	void findByUsername_WithUnexistingUsername_ThrowsException() throws UserNotFoundException {
+	void get_User_ThrowsException() throws UserNotFoundException {
 		when(userRepository.findByUsername("Unexisting username")).thenReturn(Optional.empty());
 
-		assertThatThrownBy(() -> userService.findByUsername("Unexisting username")).isInstanceOf(UserNotFoundException.class);
+		assertThatThrownBy(() -> userService.getUser("Unexisting username")).isInstanceOf(UserNotFoundException.class);
 	}
 
 	@Test
-	void findAll_ReturnsUsers_DoesNotThrowException() {
+	void getUserAll_ReturnsUsers_DoesNotThrowException() {
 		List<User> userList = List.of(VALID_USER, VALID_USER2);
 
 		when(userRepository.findAll()).thenReturn(userList);
-		List<User> list = userService.findAll();
+		List<User> list = userService.getAllUser();
 
 		assertThat(list).isEqualTo(userList);
 		assertThat(list.size()).isEqualTo(2);

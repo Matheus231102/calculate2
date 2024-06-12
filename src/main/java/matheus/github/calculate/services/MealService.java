@@ -30,24 +30,20 @@ public class MealService {
 		meal.setUser(user);
 	}
 
-	public Meal registerByAuthenticatedName(String authenticatedName, MealDTO mealDTO) throws UserNotFoundException {
-		User user = userService.findByUsername(authenticatedName);
+	public Meal addMeal(String authenticatedName, MealDTO mealDTO) throws UserNotFoundException {
+		User user = userService.getUser(authenticatedName);
 		Meal meal = mealMapper.toEntity(mealDTO);
 		registerMealToUser(meal, user);
 		return mealRepository.save(meal);
 	}
 
-	public Meal register(Meal meal) {
-		return mealRepository.save(meal);
-	}
-
-	public List<Meal> getAllMealsByAuthenticatedName(String authenticatedName) throws UserNotFoundException {
-		User user = userService.findByUsername(authenticatedName);
+	public List<Meal> getAllMeal(String authenticatedName) throws UserNotFoundException {
+		User user = userService.getUser(authenticatedName);
 		return mealRepository.findAllByUser(user);
 	}
 
-	public Meal getMealByAuthUsernameAndMealId(String authenticatedName, long id) throws UserNotFoundException {
-		User user = userService.findByUsername(authenticatedName);
+	public Meal getMeal(String authenticatedName, long id) throws UserNotFoundException {
+		User user = userService.getUser(authenticatedName);
 		Optional<Meal> optionalMeal = mealRepository.findByUserAndId(user, id);
 		if (optionalMeal.isEmpty()) {
 			throw new MealNotFoundException(String.format("Meal not found by provided id: %s", id));
