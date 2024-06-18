@@ -82,7 +82,6 @@ public class FoodService {
 	public void deleteFood(String authenticatedUsername, long id) throws UserNotFoundException {
 		User user = userService.getUser(authenticatedUsername);
 		boolean foodExists = foodRepository.existsByUserAndId(user, id);
-
 		if (!foodExists) {
 			throw new FoodNotFoundException(String.format("Food not found by provided id: %s", id));
 		}

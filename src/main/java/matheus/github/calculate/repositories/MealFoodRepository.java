@@ -27,9 +27,15 @@ public interface MealFoodRepository extends JpaRepository<MealFood, Long> {
 
 	@Transactional
 	@Modifying
+	@Query("DELETE FROM MealFood mf WHERE mf.meal.id = :mealid AND mf.food.user = :user")
+	void deleteAllByUserAndMealId(@Param("user") User user, @Param("mealid") long mealid);
+
+	@Transactional
+	@Modifying
 	@Query("DELETE FROM MealFood mf WHERE mf.food.user = :user AND mf.meal.id = :mealid AND mf.food.id = :foodid")
 	void deleteAllByUserAndMealIdAndFoodId(@Param("user") User user, @Param("mealid") long mealId, @Param("foodid") long foodId);
 
 	MealFood findById(MealFoodId mealFoodId);
+
 
 }

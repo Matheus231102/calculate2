@@ -3,7 +3,6 @@ package matheus.github.calculate.services;
 import matheus.github.calculate.dto.MealFoodDTO;
 import matheus.github.calculate.exception.exceptions.MealFoodNotFoundException;
 import matheus.github.calculate.exception.exceptions.user.UserNotFoundException;
-import matheus.github.calculate.mapper.mealfood.MealFoodMapper;
 import matheus.github.calculate.models.*;
 import matheus.github.calculate.repositories.MealFoodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +39,18 @@ public class MealFoodService {
 		return mealFoodRepository.save(mealFood);
 	}
 
-	public void deleteMealFood(String authenticatedUsername, long foodId) throws UserNotFoundException {
+	public void deleteMealFoodWithFoodId(String authenticatedUsername, long foodId) throws UserNotFoundException {
 		// vericar existencia
 		User user = userService.getUser(authenticatedUsername);
 		mealFoodRepository.deleteAllByUserAndFoodId(user, foodId);
 	}
 
+	public void deleteMealFoodWithMealId(String authenticatedUsername, long mealid) throws UserNotFoundException {
+		User user = userService.getUser(authenticatedUsername);
+		mealFoodRepository.deleteAllByUserAndMealId(user, mealid);
+	}
+
 	public void deleteMealFood(String authenticatedUsername, long mealid, long foodid) throws UserNotFoundException {
-		// vericar existencia
 		User user = userService.getUser(authenticatedUsername);
 		mealFoodRepository.deleteAllByUserAndMealIdAndFoodId(user, mealid, foodid);
 	}

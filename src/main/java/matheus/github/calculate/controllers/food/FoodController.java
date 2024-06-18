@@ -75,11 +75,11 @@ public class FoodController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteFood(@PathVariable long id) throws UserNotFoundException {
+	@DeleteMapping("/{fooid}")
+	public ResponseEntity<Void> deleteFood(@PathVariable long fooid) throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		mealFoodService.deleteMealFood(authenticatedUsername, id);
-		foodService.deleteFood(authenticatedUsername, id);
+		mealFoodService.deleteMealFoodWithFoodId(authenticatedUsername, fooid);
+		foodService.deleteFood(authenticatedUsername, fooid);
 		return ResponseEntity.noContent().build();
 	}
 

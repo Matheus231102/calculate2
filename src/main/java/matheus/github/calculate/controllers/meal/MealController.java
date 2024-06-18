@@ -5,6 +5,7 @@ import matheus.github.calculate.dto.MealDTO;
 import matheus.github.calculate.exception.exceptions.user.UserNotFoundException;
 import matheus.github.calculate.models.Meal;
 import matheus.github.calculate.security.AuthenticationContext;
+import matheus.github.calculate.services.MealFoodService;
 import matheus.github.calculate.services.MealService;
 import matheus.github.calculate.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class MealController {
 	@Autowired
 	private AuthenticationContext authenticationContext;
 
+	@Autowired
+	private MealFoodService mealFoodService;
+
 	@PostMapping
 	public ResponseEntity<Meal> addMeal(@RequestBody @Valid MealDTO mealDTO) throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
@@ -38,6 +42,14 @@ public class MealController {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
 		List<Meal> mealList = mealService.getAllMeal(authenticatedUsername);
 		return ResponseEntity.status(HttpStatus.OK).body(mealList);
+	}
+
+	@DeleteMapping("/{mealid}")
+	public ResponseEntity<Void> deleteMeal(@PathVariable("mealid") long mealid) throws UserNotFoundException {
+		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
+		mealFoodService.deleteMealFoodWithMealId(authenticatedUsername, mealid);
+		mealService.deleteMeal(authenticatedUsername, mealid);
+		return ResponseEntity.noContent().build();
 	}
 
 }

@@ -37,6 +37,16 @@ public class MealService {
 		return mealRepository.save(meal);
 	}
 
+	public void deleteMeal(String authenticatedName, long mealid) throws UserNotFoundException {
+		User user = userService.getUser(authenticatedName);
+		boolean exists = mealRepository.existsByUserAndId(user, mealid);
+		if (!exists) {
+			throw new MealNotFoundException(String.format("Meal not found by provided id: %s", mealid));
+		}
+
+		mealRepository.deleteByUserAndMealId(user, mealid);
+	}
+
 	public List<Meal> getAllMeal(String authenticatedName) throws UserNotFoundException {
 		User user = userService.getUser(authenticatedName);
 		return mealRepository.findAllByUser(user);
@@ -50,4 +60,5 @@ public class MealService {
 		}
 		return optionalMeal.get();
 	}
+
 }

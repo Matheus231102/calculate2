@@ -25,7 +25,7 @@ public class Meal {
 	private String name;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "meal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
 	private List<MealFood> mealFoods;
 
 	@JsonIgnore
