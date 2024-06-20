@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -21,12 +22,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-import static matheus.github.calculate.enums.Role.*;
 import static matheus.github.calculate.paths.PathConstants.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
 	@Autowired
@@ -42,9 +43,6 @@ public class SecurityConfig {
 						requests -> requests
 								.requestMatchers(DEFAULT_USER_PATH + LOGIN_PATH).permitAll()
 								.requestMatchers(DEFAULT_USER_PATH + REGISTER_PATH).permitAll()
-								.requestMatchers("/teste").permitAll()
-								.requestMatchers(DEFAULT_USER_PATH + ADMIN_PATH + "/**").hasAnyRole(MANAGER.name(), ADMIN.name())
-								.requestMatchers(DEFAULT_MEAL_PATH).hasAnyRole(MANAGER.name(), ADMIN.name(), USER.name())
 								.anyRequest().authenticated()
 				)
 				.addFilterBefore(validateJwtFilter, AuthorizationFilter.class)
@@ -53,7 +51,6 @@ public class SecurityConfig {
 				.build();
 	}
 
-	//implementar sistema de hierarquias no spring boot
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
 		return authenticationConfiguration.getAuthenticationManager();

@@ -12,6 +12,7 @@ import matheus.github.calculate.services.MealFoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(PathConstants.DEFAULT_FOOD_PATH)
+@PreAuthorize("hasAnyRole('USER', 'ADMIN', 'MANAGER')")
 public class FoodController {
 
 	@Autowired

@@ -11,6 +11,7 @@ import matheus.github.calculate.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import static matheus.github.calculate.paths.PathConstants.DEFAULT_MEAL_PATH;
 
 @RestController
 @RequestMapping(DEFAULT_MEAL_PATH)
+@PreAuthorize("hasAnyRole('USER', 'ADMIN', 'MANAGER')")
 public class MealController {
 
 	@Autowired
