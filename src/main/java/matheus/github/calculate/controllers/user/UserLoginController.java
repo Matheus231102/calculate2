@@ -23,13 +23,13 @@ public class UserLoginController {
 	private UserService userService;
 
 	@PostMapping(LOGIN_PATH)
-	public ResponseEntity<String> loginUser(@RequestBody @Valid AuthDTO authDTO) throws UserNotFoundException {
+	public ResponseEntity loginUser(@RequestBody @Valid AuthDTO authDTO) throws UserNotFoundException {
 		String token = userService.loginUser(authDTO);
 
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.header("Authorization", token)
-				.body("User: " + authDTO.getLogin() + " successfully logged in");
+				.build();
 	}
 
 }
