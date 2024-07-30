@@ -7,6 +7,10 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
+/**
+ * Objeto que representa a entidade (Food) no sistema, valores não nulos e com valor mínimo 0.0 (name, calories, proteins, carbohydrates, fats)
+ * atributo price não é obrigatório
+ */
 @Getter
 @Setter
 @Builder
