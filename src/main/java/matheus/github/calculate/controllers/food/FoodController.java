@@ -75,7 +75,7 @@ public class FoodController {
 	 * @param fields Campos necessários para atualização, não é necessário preenchimento de todos os valores obrigatórios da entidadade (FoodDTO) como (name, calories, proteins, carbohydrates, fats),
 	 *                 deve ser utilizado pelo menos 1 atributo, exceto atributo de identificação (id).
 	 * @param id id da entidade (Food) que deseja modificar.
-	 * @return lista das entidades com atributos atualizados.
+	 * @return entidade com atributos atualizados.
 	 * @throws UserNotFoundException caso usuário não esteja autenticado corretamente através do token JWT.
 	 */
 	@PatchMapping("/{id}")
