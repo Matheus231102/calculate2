@@ -140,12 +140,30 @@ public class FoodService {
 	}
 
 	/**
+	 *
+	 * @param authenticatedUsername nome do usuário autenticado, precisa ser capturado através do AuthenticationContext e enviado como parâmetro para a função.
+	 * @param foodsId lista de id's das entidades (Food) a serem removidas
+	 * @throws UserNotFoundException caso usuário não esteja autenticado corretamente através do token JWT.
+	 */
+	public void deleteFoods(String authenticatedUsername, List<Long> foodsId) throws UserNotFoundException {
+		User user = userService.getUser(authenticatedUsername);
+		foodsId.forEach(foodId -> {
+			boolean exists = foodRepository.existsByUserAndId(user, foodId);
+			if (!exists) {
+				throw new FoodNotFoundException(String.format("Food not found by provided id: %s", foodId));
+			}
+			foodRepository.deleteByUserAndFoodId(user, foodId);
+		});
+	}
+
+	/**
 	 * Registra a entidade (Food) a uma entidade (User) para evitar conflitos nos dados.
-	 * @param food
-	 * @param user
+	 * @param food entidade (Food)
+	 * @param user entidade (User)
 	 */
 	private void registerFoodToUser(Food food, User user) {
 		user.getFoods().add(food);
 		food.setUser(user);
 	}
+
 }

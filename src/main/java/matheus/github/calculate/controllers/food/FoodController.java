@@ -111,15 +111,29 @@ public class FoodController {
 
 	/**
 	 * Remove entidade (Food) ligada ao usuário autenticado através de seu id.
-	 * @param fooid id da entidade (Food) que deseja remover.
+	 * @param foodId id da entidade (Food) que deseja remover.
 	 * @return void
 	 * @throws UserNotFoundException caso usuário não esteja autenticado corretamente através do token JWT.
 	 */
 	@DeleteMapping("/{fooid}")
-	public ResponseEntity<Void> deleteFood(@PathVariable long fooid) throws UserNotFoundException {
+	public ResponseEntity<Void> deleteFood(@PathVariable Long foodId) throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-		mealFoodService.deleteMealFoodWithFoodId(authenticatedUsername, fooid);
-		foodService.deleteFood(authenticatedUsername, fooid);
+		mealFoodService.deleteMealFoodWithFoodId(authenticatedUsername, foodId);
+		foodService.deleteFood(authenticatedUsername, foodId);
+		return ResponseEntity.noContent().build();
+	}
+
+	/**
+	 *
+	 * @param foodsId lista de id's das entidades (Food) a serem removidas.
+	 * @return void
+	 * @throws UserNotFoundException caso usuário não esteja autenticado corretamente através do token JWT.
+	 */
+	@PostMapping("/delete")
+	public ResponseEntity<Void> deleteFoods(@RequestBody List<Long> foodsId) throws UserNotFoundException {
+		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
+		mealFoodService.deleteMealFoodsWithFoodsId(authenticatedUsername, foodsId);
+		foodService.deleteFoods(authenticatedUsername, foodsId);
 		return ResponseEntity.noContent().build();
 	}
 

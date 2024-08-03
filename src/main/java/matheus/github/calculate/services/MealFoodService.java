@@ -39,18 +39,24 @@ public class MealFoodService {
 		return mealFoodRepository.save(mealFood);
 	}
 
-	public void deleteMealFoodWithFoodId(String authenticatedUsername, long foodId) throws UserNotFoundException {
-		// vericar existencia
+	public void deleteMealFoodsWithFoodsId(String authenticatedUsername, List<Long> foodsId) throws UserNotFoundException {
+		User user = userService.getUser(authenticatedUsername);
+		foodsId.forEach(foodId -> {
+			mealFoodRepository.deleteAllByUserAndFoodId(user, foodId);
+		});
+	}
+
+	public void deleteMealFoodWithFoodId(String authenticatedUsername, Long foodId) throws UserNotFoundException {
 		User user = userService.getUser(authenticatedUsername);
 		mealFoodRepository.deleteAllByUserAndFoodId(user, foodId);
 	}
 
-	public void deleteMealFoodWithMealId(String authenticatedUsername, long mealid) throws UserNotFoundException {
+	public void deleteMealFoodWithMealId(String authenticatedUsername, Long mealid) throws UserNotFoundException {
 		User user = userService.getUser(authenticatedUsername);
 		mealFoodRepository.deleteAllByUserAndMealId(user, mealid);
 	}
 
-	public void deleteMealFood(String authenticatedUsername, long mealid, long foodid) throws UserNotFoundException {
+	public void deleteMealFood(String authenticatedUsername, Long mealid, Long foodid) throws UserNotFoundException {
 		User user = userService.getUser(authenticatedUsername);
 		mealFoodRepository.deleteAllByUserAndMealIdAndFoodId(user, mealid, foodid);
 	}
