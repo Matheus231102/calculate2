@@ -84,4 +84,16 @@ public class UserService {
 		userRepository.deleteAll();
 	}
 
+	/**
+	 *
+	 * @param email email para verificar se está disponível.
+	 * @return true para caso o e-mail esta disponível para utilização, false para caso não esteja disponível.
+	 */
+	public Boolean isEmailAvailable(String email) {
+		return !userRepository.existsByEmail(email);
+	}
+
+	public Boolean isUsernameAvailable(String username) {
+		return !userRepository.existsByUsername(username);
+	}
 }

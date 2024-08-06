@@ -10,6 +10,14 @@ import java.util.regex.Pattern;
 @Component
 public class PasswordValidationStrategy implements UserValidationStrategy  {
 
+	/**
+	 * As regras para criação da senha são:
+	 *  	A senha deve conter pelo menos um dígito (0-9).
+	 *  	A senha deve conter pelo menos uma letra minúscula (a-z).
+	 *		A senha deve conter pelo menos uma letra maiúscula (A-Z).
+	 *		A senha deve ter pelo menos 8 caracteres.
+	 *		A senha pode conter somente os caracteres especiais: $, *, &, @, #.
+	 */
 	@Override
 	public void execute(UserDTO userDTO) {
 		String password = userDTO.getPassword();

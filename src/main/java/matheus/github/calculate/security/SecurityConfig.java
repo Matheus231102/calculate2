@@ -22,7 +22,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-import static matheus.github.calculate.paths.PathConstants.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -33,6 +32,9 @@ public class SecurityConfig {
 	@Autowired
 	private ValidateJwtFilter validateJwtFilter;
 
+	@Autowired
+	private UnprotectedEndpoints unprotectedEndpoints;
+
 	@Bean
 	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 		return http
@@ -41,8 +43,7 @@ public class SecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
 				.authorizeHttpRequests(
 						requests -> requests
-								.requestMatchers(DEFAULT_USER_PATH + LOGIN_PATH).permitAll()
-								.requestMatchers(DEFAULT_USER_PATH + REGISTER_PATH).permitAll()
+								.requestMatchers(unprotectedEndpoints.getUnprotectedEndpointsVector()).permitAll()
 								.anyRequest().authenticated()
 				)
 				.addFilterBefore(validateJwtFilter, AuthorizationFilter.class)

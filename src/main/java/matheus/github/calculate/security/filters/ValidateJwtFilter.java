@@ -5,7 +5,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.MissingClaimException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,8 +14,8 @@ import matheus.github.calculate.exception.controlleradvice.HeaderControllerAdvic
 import matheus.github.calculate.exception.controlleradvice.JwtControllerAdvice;
 import matheus.github.calculate.exception.exceptions.InvalidAuthenticationHeaderException;
 import matheus.github.calculate.jwt.JwtService;
+import matheus.github.calculate.security.UnprotectedEndpoints;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,11 +25,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import static matheus.github.calculate.paths.PathConstants.*;
 
 @Component
 public class ValidateJwtFilter extends OncePerRequestFilter {
@@ -46,6 +44,9 @@ public class ValidateJwtFilter extends OncePerRequestFilter {
 
 	@Autowired
 	private CustomizedExceptionResponse customizedExceptionResponse;
+
+	@Autowired
+	private UnprotectedEndpoints unprotectedEndpoints;
 
 	private static final String BEARER_PREFIX = "Bearer ";
 
@@ -71,10 +72,6 @@ public class ValidateJwtFilter extends OncePerRequestFilter {
 			return;
 		} catch (TokenExpiredException exception) {
 			var responseEntity = jwtControllerAdvice.handleTokenExpiredException(exception);
-			customizedExceptionResponse.modifyResponse(response, responseEntity);
-			return;
-		} catch (MissingClaimException exception) {
-			var responseEntity = jwtControllerAdvice.handleMissingClaimException(exception);
 			customizedExceptionResponse.modifyResponse(response, responseEntity);
 			return;
 		} catch (JWTVerificationException exception) {
@@ -106,9 +103,16 @@ public class ValidateJwtFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-	   List<String> paths = List.of(DEFAULT_USER_PATH + LOGIN_PATH, DEFAULT_USER_PATH + REGISTER_PATH);
-	   return paths.contains(request.getRequestURI());
-    }
+		String requestPath = request.getRequestURI();
+		List<String> endpoints = unprotectedEndpoints.getUnprotectedEndpoints();
+
+		for (String endpoint : endpoints) {
+			if (requestPath.startsWith(endpoint)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
     private String extractTokenFromRequest(HttpServletRequest request) throws InvalidAuthenticationHeaderException, IOException {
 		String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
